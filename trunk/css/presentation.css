@@ -1,0 +1,33 @@
+#carte {
+	width	: 640px;
+	height	: 480px;
+}
+
+h1 {text-align : center;}
+
+body > section {
+	display	: flex;
+}
+
+div.L3_List > ul {
+	list-style-type	: decimal-leading-zero;
+}
+
+div.L3_List > ul > li {
+	border			: solid black 1px;
+	background		: #EE6;
+	margin-bottom	: 3px;
+}
+
+.MapLabels {
+	color: red;
+	background-color: white;
+	font-family: "Lucida Grande", "Arial", sans-serif;
+	font-size: 10px;
+	font-weight: bold;
+	text-align: center;
+	width: 40px;     
+	border: 2px solid black;
+	white-space: nowrap;
+}
+ 
