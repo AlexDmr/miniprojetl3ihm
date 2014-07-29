@@ -9,8 +9,8 @@
           "fs-extra"	: ">=0.8"
 		, "express"		: ">=3"
 		, "xmldom"		: ">=0.1.18"
+		, "xpath.js"	: ">=0.0.4"
 		, "request"		: ">=2.33"
 		, "body-parser"	: ">=1.4.3"
-		, "node_xslt"	: ">=0.1"
     }
 }

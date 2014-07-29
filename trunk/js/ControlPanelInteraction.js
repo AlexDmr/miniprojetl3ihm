@@ -127,29 +127,6 @@ var ControlPanelInteraction = {
 		 this.L_markers = [];
 		 this.display_Visites( LV );
 		}
-	, displayPath			: function(L_indexes) {
-		 if(typeof L_indexes === 'undefined') {
-			 L_indexes = new Int32Array( this.L_markers.length );
-			 for(var i=0; i<this.L_markers.length; i++) {L_indexes[i] = i;}
-			}
-		 // Build path array
-		 var request =	{ origin		: this.L_markers[L_indexes[0]].position
-						, destination	: this.L_markers[L_indexes[0]].position
-						, travelMode	: google.maps.TravelMode.DRIVING
-						, waypoints		: []
-						, optimizeWaypoints: false
-						}
-		   , self = this;
-		 for(var i=1; i<L_indexes.length; i++) {
-			 request.waypoints.push( {location : this.L_markers[L_indexes[i]].position} );
-			}
-		 this.serviceDirection.route( request
-									, function(response, status) {
-										 console.log("Direction:", response, status);
-										 self.directionsDisplay.setDirections(response);
-										}
-									);
-		}
 };
 
 return ControlPanelInteraction;
