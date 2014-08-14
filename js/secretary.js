@@ -6,7 +6,7 @@ define ( [ "ControlPanelInteraction"
 			 ControlPanel = ControlPanelInteraction;
 			 domReady( function() {
 				 console.log(ControlPanel);
-				 ControlPanel.init( 'map', 'Affectations' );
+				 ControlPanel.init( 'map', 'Affectations', 'newPatientMap' );
 				});
 			 return ControlPanel;
 			}
