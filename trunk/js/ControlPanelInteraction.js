@@ -6,11 +6,59 @@ define	( [ 'L3_List'
 var ControlPanelInteraction = {
 	  map					: null
 	, L_markers				: []
-	, init					: function(mapId, tableInfirmiereId) {
+	, init					: function(mapId, tableInfirmiereId, newPatientMapId) {
 		 var self = this;
+		 
+		 // Drag & Drop
+		 this.draggingPatientCard = null;
+		 
+		 // Remaining patients
+		 this.div_remainingPatient		= document.getElementById('PatientsRestants');
+		 
+		 // Geocoder
+		 this.geocoder = new google.maps.Geocoder();
+
+		// New patient
+		 this.newPatientMap = new google.maps.Map	( document.getElementById(newPatientMapId)
+										, { center: new google.maps.LatLng(45.193861, 5.768843)
+										  , zoom: 11
+										  }
+										);
+		 this.newPatientMarker = new google.maps.Marker(
+				{ position	: new google.maps.LatLng(0, 0)
+				, map		: this.newPatientMap
+				, title		: "Hello World!"
+				} );
+		 google.maps.event.addListener(
+				  this.newPatientMap
+				, 'click'
+				, function(evt) {
+					 // console.log("Click on new patient map", self.newPatientMarker.position, evt.latLng);
+					 self.newPatientMarker.setPosition(evt.latLng);
+					 self.geocoder.geocode( {'latLng': evt.latLng}
+									 , function(results, status) {
+											if (status == google.maps.GeocoderStatus.OK) {
+												 console.log(results);
+												 var res = results[0].address_components;
+												 // Create a table associating response type to their long name
+												 var adComponents = {}
+												 for(var i=0; i<res.length; i++) {
+													 adComponents[ res[i].types[0] ] = res[i].long_name;
+													}
+												 console.log( adComponents );
+												 document.getElementById('patientStreet').value = (adComponents.street_number?(adComponents.street_number+' '):'') + adComponents.route;
+												 document.getElementById('patientPostalCode').value = adComponents.postal_code;
+												 document.getElementById('patientCity').value = adComponents.locality;
+												} else {console.error("Error in geocoding ", evt.latLng, " : ", status);}
+											}
+									 );
+					}
+				);
+		 
+		// All patients
 		 this.map = new google.maps.Map	( document.getElementById(mapId)
 										, { center: new google.maps.LatLng(45.193861, 5.768843)
-										  , zoom: 12
+										  , zoom: 11
 										  }
 										);
 		 // google.maps.event.addListener(this.map, 'click', function(e) {self.addMark(e);});
@@ -21,53 +69,119 @@ var ControlPanelInteraction = {
 																	 });
 		 this.directionsDisplay.setMap( this.map );
 		 
-		 // Geocoder
-		 this.geocoder = new google.maps.Geocoder();
-
 		 // Access to the server data
 		 this.tableInfirmiere     = document.getElementById( tableInfirmiereId );
 		 this.bodytableInfirmiere = this.tableInfirmiere.querySelector('tbody');
-		 utils.XHR( 'GET', '/data/cabinet_output.xml'
+		 utils.XHR( 'GET', '/data/cabinetInfirmier.xml'
 				  , {onload : function() {
+								// Get references to relevant elements
+								 var tbody = document.querySelector('#Affectations > tbody');
 								 var xml = this.responseXML;
 								 self.dataXML = xml;
-								 // console.log( xml );
-								 var L = xml.querySelectorAll('infirmiers > infirmier');
-								 // console.log( L );
-								 for(var i=0; i<L.length; i++) {
-									 var tr = document.createElement('tr');
-									 var str = "<td>" 
-											 + L.item(i).querySelector('prénom').innerHTML
-											 + " "
-											 + L.item(i).querySelector('nom').innerHTML
-											 + "</td>"
-									 str += "<td>";
-										// List all visite
-										var LP = L.item(i).querySelectorAll('visite');
-										// console.log(LP);
-										for(var p=0; p<LP.length; p++) {
-											 str += '<span class="visite">';
-											 str += LP.item(p).querySelector('prénom').innerHTML
-												  + ' '
-												  + LP.item(p).querySelector('nom').innerHTML;
-											 str += "</span> -> ";
-											}
-									 str += "</td>";
-									 tr.innerHTML = str;
-									 self.bodytableInfirmiere.appendChild( tr );
-									 
-									 // Subscribe to mousedown
-									 tr.addEventListener( 'mousedown'
-														, function(i) {
-															return function(e) {
-																	 self.displayTournee( L.item(i) );
-																	}
-															}(i)
-														, false);
+								 
+								// Make a drop zone of the remaining patients
+								 self.MakeDropZoneOf( self.div_remainingPatient );
+								 
+								// For each nurse, get the list of patients
+								// "unallocated" patient are listed appart
+								 var infirmieres = {none: {html: null, visites:[]}};
+								 var L_nodes_infirmiers = xml.querySelectorAll("cabinet > infirmiers > infirmier");
+								 for(var i=0; i<L_nodes_infirmiers.length; i++) {
+									 var infirmiere = infirmieres[ L_nodes_infirmiers[i].getAttribute('id') ] = {node: L_nodes_infirmiers[i], visites:[]}
+									 var html_tr = document.createElement('tr');
+									 tbody.appendChild( html_tr );
+									 infirmiere.html = html_tr;
+									}
+								 var L_node_patients = xml.querySelectorAll("cabinet > patients > patient");
+								 for(var i=0; i<L_node_patients.length; i++) {
+									 var intervenant = L_node_patients[i].querySelector('visite').getAttribute('intervenant');
+									 console.log('intervenant :', intervenant);
+									 var infirmier = intervenant?String(intervenant):'none';
+									 infirmieres[ infirmier ].visites.push( L_node_patients[i] );
+									}
+								// Display nurses and related patients on the table
+								 for(var i in infirmieres) {
+									 if(i === 'none') continue;
+									 var infirmiere = infirmieres[i];
+									 console.log(i, ' : ', infirmiere, ' in ', infirmieres);
+									 var tr			= infirmiere.html;
+									 var td			= document.createElement('td');
+									 td.innerHTML	= infirmiere.node.querySelector('prénom').textContent
+													+ ' '
+													+ infirmiere.node.querySelector('nom').textContent;
+									 tr.appendChild(td);
+									 td	= document.createElement('td');
+										// Act as a drop zone for patientCard
+										self.MakeDropZoneOf( td );
+									 tr.appendChild(td);
+									 for(var v=0; v<infirmiere.visites.length; v++) {
+										 td.appendChild( self.addPatientUI( infirmiere.visites[v] ) );
+										}
+									}
+								// Display remaining patients
+								 var infirmiere = infirmieres['none'];
+								 if(infirmiere.visites.length) {self.div_remainingPatient.classList.add('display');}
+								 for(var v=0; v<infirmiere.visites.length; v++) {
+									 self.div_remainingPatient.appendChild( self.addPatientUI( infirmiere.visites[v] ) );
 									}
 								}
 				    }
 				  );
+		}
+	, MakeDropZoneOf		: function(htmlElement) {
+		 var self = this;
+		 htmlElement.addEventListener( 'dragover'
+									 , function(evt) {
+										 if(self.draggingPatientCard) {evt.preventDefault();}
+										}
+									 , false );
+		 htmlElement.addEventListener( 'dragenter'
+									 , function(evt) {htmlElement.classList.add('currentDropZone');}
+									 , false );
+		 htmlElement.addEventListener( 'dragleave'
+									 , function(evt) {htmlElement.classList.remove('currentDropZone');}
+									 , false );
+		 htmlElement.addEventListener( 'drop'
+									 , function(evt) {
+										 if(self.draggingPatientCard) {
+											 self.draggingPatientCard.htmlElement.parentNode.removeChild( self.draggingPatientCard.htmlElement );
+											 htmlElement.appendChild( self.draggingPatientCard.htmlElement );
+											 // Is there some patientCard in the remaining zone ?
+											 var L = self.div_remainingPatient.querySelectorAll('.patientCard');
+											 if ( (L.length  >  0 && self.div_remainingPatient.classList.contains('display') === false)
+												||(L.length === 0 && self.div_remainingPatient.classList.contains('display') === true) ) {
+												 self.div_remainingPatient.classList.toggle('display');
+												}
+											}
+										}
+									 , false );
+		}
+	, addPatientUI			: function( visite) {
+		 var self = this;
+		// Create a root div
+		 var div = document.createElement('div');
+			div.classList.add('patientCard');
+			div.setAttribute('draggable', 'true');
+			div.setAttribute('id', visite.querySelector('numéro').textContent);
+			div.addEventListener	( 'dragstart'
+									, function() {self.draggingPatientCard = {htmlElement: div, visite: visite};}
+									, false );
+			div.addEventListener	( 'dragend'
+									, function() {self.draggingPatientCard = null;}
+									, false );
+			
+		// Name
+		 var divName = document.createElement('div');
+			divName.classList.add('name');
+			divName.innerText = visite.querySelector('nom').textContent;
+			div.appendChild( divName );
+		// Forname
+		 var divForname = document.createElement('div');
+			divForname.classList.add('forname');
+			divForname.innerText = visite.querySelector('prénom').textContent;
+			div.appendChild( divForname );
+		// return the root div
+		 return div;
 		}
 	, display_Visites		: function( LV, index ) {
 		 var self = this;
