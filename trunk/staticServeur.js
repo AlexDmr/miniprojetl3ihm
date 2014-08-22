@@ -4,8 +4,34 @@ var RRServer = {
 	, bodyParser	: require("body-parser")
 	, DOMParser		: require('xmldom').DOMParser
 	, XMLSerializer	: require('xmldom').XMLSerializer
+	, multer		: require('multer')
 	, app			: null
 	, nurses		: []
+	, saveXML		: function(res) {
+		 var self = this;
+		 self.fs.writeFile	( './data/cabinetInfirmier.xml' // path
+							, self.xmlSerializer.serializeToString( self.doc ) // data
+							, function(err) { // callback
+								 if (err) {
+									 console.error( "Error writing ./data/cabinetInfirmier.xml:\n", err);
+									 res.writeHead(500);
+									 res.write("Error writing ./data/cabinetInfirmier.xml:\n", err);
+									} else {res.writeHead(200);}
+								 res.end();
+								}
+							);
+		}
+	, getPatient	: function(number) {
+		 var L = this.doc.getElementsByTagName('patient')
+		   , num_node;
+		 for(var i=0; i<L.length; i++) {
+			 num_node = L[i].getElementsByTagName('numéro')[0];
+			 if(num_node.textContent === number) {
+				 return L[i];
+				}
+			}
+		 return null;
+		}
 	, init			: function(port) {
 		 var self = this;
 		 
@@ -28,8 +54,10 @@ var RRServer = {
 		 
 		// HTTP server
 		 this.app	  = this.express();
-		 this.server  = this.app.use(this.express.static(__dirname))
+		 this.server  = this.app.use( this.express.static(__dirname) )
 								.use( this.bodyParser.urlencoded({ extended: false }) )
+								.use( this.bodyParser.json() )
+								.use( this.multer({ dest: './uploads/'}) )
 								.listen(port) ;
 		 this.app.post('/', function(req, res) {
 				 // POST contains a login that identify the secretary or one nurse
@@ -49,15 +77,33 @@ var RRServer = {
 					 break;
 					 default: // Is it a nurse ?
 					 res.writeHead(200);
-					 res.write("Unknown login : " + req.body.login);
+					 res.write("Unsupported login : " + req.body.login);
 					 res.end();
 					}
 				});
 		 this.app.post('/addPatient', function(req, res) {
-							 console.log("/addPatient", req.body);
+							 console.log("/addPatient, \nreq.body:\n\t", req.body, "\n_______________________");
+							 req.body.patientName		= req.body.patientName		|| '';
+							 req.body.patientForname	= req.body.patientForname	|| '';
+							 req.body.patientNumber		= req.body.patientNumber	|| '';
+							 req.body.patientSex		= req.body.patientSex		|| '';
+							 req.body.patientBirthday	= req.body.patientBirthday	|| '';
+							 req.body.patientFloor		= req.body.patientFloor		|| '';
+							 req.body.patientStreet		= req.body.patientStreet	|| '';
+							 req.body.patientPostalCode	= req.body.patientPostalCode|| '';
+							 req.body.patientCity		= req.body.patientCity		|| '';
+							 
 							 var patients = self.doc.getElementsByTagName('patients')[0]
-							 var newPatient = self.doc.createElement('patient');
-								patients.appendChild( newPatient );
+							 // Is it a new patient or not ?
+							 var newPatient = self.getPatient( req.body.patientNumber );
+							 if(newPatient === null) {
+								 newPatient = self.doc.createElement('patient');
+								 patients.appendChild( newPatient );
+								} else	{// Erase subtree
+										 while(newPatient.childNodes.length) {
+											 newPatient.removeChild( newPatient.childNodes[0] );
+											}
+										}
 								// Name
 								var nom = self.doc.createElement('nom');
 								nom.appendChild( self.doc.createTextNode(req.body.patientName) );
@@ -78,25 +124,60 @@ var RRServer = {
 								var naissance = self.doc.createElement('naissance');
 								naissance.appendChild( self.doc.createTextNode(req.body.patientBirthday) );
 								newPatient.appendChild( naissance );
+								// Visites
+								var visite = self.doc.createElement('visite');
+								visite.setAttribute('date', "2014-12-08");
+								newPatient.appendChild( visite );
 								// Adress
 								var adresse = self.doc.createElement('adresse');
 								newPatient.appendChild( adresse );
 									var étage = self.doc.createElement('étage');
+									étage.appendChild( self.doc.createTextNode(req.body.patientFloor) );
 									adresse.appendChild( étage );
 									var numAdress = self.doc.createElement('numéro');
+									numAdress.appendChild( self.doc.createTextNode(req.body.patientFloor) );
 									adresse.appendChild( numAdress );
 									var rue = self.doc.createElement('rue');
+									rue.appendChild( self.doc.createTextNode(req.body.patientStreet) );
 									adresse.appendChild( rue );
 									var ville = self.doc.createElement('ville');
+									ville.appendChild( self.doc.createTextNode(req.body.patientCity) );
 									adresse.appendChild( ville );
-									// <étage>4</étage>
-									// <numéro>46</numéro>
-									// <rue>avenue Félix Viallet</rue>
-									// <ville>Grenoble</ville>
-									// <codePostal
+									var codePostal = self.doc.createElement('codePostal');
+									codePostal.appendChild( self.doc.createTextNode(req.body.patientPostalCode) );
+									adresse.appendChild( codePostal );
+									
 							 console.log( self.xmlSerializer.serializeToString(newPatient) );
-							 res.writeHead(200);
-							 res.end();
+							 self.saveXML(res);
+							}
+				);
+		 this.app.post( '/affectation'
+					  , function(req, res) {
+							 if( typeof req.body.infirmier	=== 'undefined'
+							   ||typeof req.body.patient	=== 'undefined' ) {
+							    res.writeHead(500);
+								res.end("You should specify 'infirmier' with her id and 'patient' with her social security number in your request.");
+							   } else {// Get node corresponding to the nurse
+									   var nurse = self.doc.getElementById( req.body.infirmier );
+									   if (nurse || req.body.infirmier === 'none') {
+											// Get node corresponding to the patient
+											var LP = self.doc.getElementsByTagName('patient')
+											  , node_num;
+											for(var i=0; i<LP.length; i++) {
+												 node_num = LP[i].getElementsByTagName('numéro')[0]; //querySelector('numéro');
+												 if( node_num.textContent === req.body.patient ) {
+													 // Do stuff here
+													 // LP[i].querySelector('visite').setAttribute('intervenant', req.body.infirmier);
+													 if( req.body.infirmier === 'none' ) {req.body.infirmier = '';}
+													 LP[i].getElementsByTagName('visite')[0].setAttribute('intervenant', req.body.infirmier);
+													 self.saveXML(res);
+													 break;
+													}
+												}
+										} else {res.writeHead(500);
+												res.end("There is no nurse identified by id", req.body.infirmier);
+												}
+									  }
 							}
 				);
 		 this.app.post('/INFIRMIERE', function(req, res) {

@@ -19,6 +19,27 @@ var ControlPanelInteraction = {
 		 this.geocoder = new google.maps.Geocoder();
 
 		// New patient
+		 var div_addPatient = document.getElementById('addPatient');
+		 var btAddPatient	= document.getElementById('btAddPatient');
+		 var bt_add			= this.div_remainingPatient.querySelector('button');
+		 btAddPatient.addEventListener( 'click'
+								, function() {
+									 // Send Ajax request and wait for response to close the add window
+									 // But unactivate it during the AJAX call...
+									 utils.XHR	( 'POST', '/addPatient'
+												, { onload	: function() {
+																 div_addPatient.classList.remove('display');
+																 console.log('addPatient response :', this);
+																}
+												  , form	: div_addPatient.querySelector('form')
+												  }
+												);
+									 
+									}
+								, false );
+		 bt_add.addEventListener( 'click'
+								, function() {div_addPatient.classList.add('display');}
+								, false );
 		 this.newPatientMap = new google.maps.Map	( document.getElementById(newPatientMapId)
 										, { center: new google.maps.LatLng(45.193861, 5.768843)
 										  , zoom: 11
@@ -74,13 +95,14 @@ var ControlPanelInteraction = {
 		 this.bodytableInfirmiere = this.tableInfirmiere.querySelector('tbody');
 		 utils.XHR( 'GET', '/data/cabinetInfirmier.xml'
 				  , {onload : function() {
+								 console.log("GET cabinet :", this);
 								// Get references to relevant elements
 								 var tbody = document.querySelector('#Affectations > tbody');
 								 var xml = this.responseXML;
 								 self.dataXML = xml;
 								 
 								// Make a drop zone of the remaining patients
-								 self.MakeDropZoneOf( self.div_remainingPatient );
+								 self.MakeDropZoneOf( self.div_remainingPatient, 'none' );
 								 
 								// For each nurse, get the list of patients
 								// "unallocated" patient are listed appart
@@ -112,7 +134,7 @@ var ControlPanelInteraction = {
 									 tr.appendChild(td);
 									 td	= document.createElement('td');
 										// Act as a drop zone for patientCard
-										self.MakeDropZoneOf( td );
+										self.MakeDropZoneOf(td, i);
 									 tr.appendChild(td);
 									 for(var v=0; v<infirmiere.visites.length; v++) {
 										 td.appendChild( self.addPatientUI( infirmiere.visites[v] ) );
@@ -128,7 +150,7 @@ var ControlPanelInteraction = {
 				    }
 				  );
 		}
-	, MakeDropZoneOf		: function(htmlElement) {
+	, MakeDropZoneOf		: function(htmlElement, nurseId) {
 		 var self = this;
 		 htmlElement.addEventListener( 'dragover'
 									 , function(evt) {
@@ -152,19 +174,41 @@ var ControlPanelInteraction = {
 												||(L.length === 0 && self.div_remainingPatient.classList.contains('display') === true) ) {
 												 self.div_remainingPatient.classList.toggle('display');
 												}
+											// Affectation of the patient to a new nurse
+											 var patient		= self.draggingPatientCard.patient
+											   , patientNumber	= patient.querySelector('numéro').textContent;
+											 utils.XHR( 'POST', '/affectation'
+													  , { onload		: function() {console.log("/affectation =>", this);}
+													    , variables	: {infirmier:nurseId, patient: patientNumber}
+													    }
+													  );
 											}
 										}
 									 , false );
 		}
-	, addPatientUI			: function( visite) {
+	, editPatient			: function(patient) {
+		 var div_addPatient = document.getElementById('addPatient');
+		 
+		 div_addPatient.classList.add('display');
+		 document.getElementById('patientName').value		= patient.querySelector('nom').textContent;
+		 document.getElementById('patientForname').value	= patient.querySelector('prénom').textContent;
+		 document.getElementById('patientSex').value		= patient.querySelector('sexe').textContent;
+		 document.getElementById('patientNumber').value		= patient.querySelector('numéro').textContent;
+		 document.getElementById('patientBirthday').value	= patient.querySelector('naissance').textContent;
+		 document.getElementById('patientFloor').value		= patient.querySelector('étage').textContent;
+		 document.getElementById('patientStreet').value		= patient.querySelector('rue').textContent;
+		 document.getElementById('patientPostalCode').value	= patient.querySelector('codePostal').textContent;
+		 document.getElementById('patientCity').value		= patient.querySelector('ville').textContent;
+		}
+	, addPatientUI			: function( patient) {
 		 var self = this;
 		// Create a root div
 		 var div = document.createElement('div');
 			div.classList.add('patientCard');
 			div.setAttribute('draggable', 'true');
-			div.setAttribute('id', visite.querySelector('numéro').textContent);
+			div.setAttribute('id', patient.querySelector('numéro').textContent);
 			div.addEventListener	( 'dragstart'
-									, function() {self.draggingPatientCard = {htmlElement: div, visite: visite};}
+									, function() {self.draggingPatientCard = {htmlElement: div, patient: patient};}
 									, false );
 			div.addEventListener	( 'dragend'
 									, function() {self.draggingPatientCard = null;}
@@ -173,12 +217,12 @@ var ControlPanelInteraction = {
 		// Name
 		 var divName = document.createElement('div');
 			divName.classList.add('name');
-			divName.innerText = visite.querySelector('nom').textContent;
+			divName.innerText = patient.querySelector('nom').textContent;
 			div.appendChild( divName );
 		// Forname
 		 var divForname = document.createElement('div');
 			divForname.classList.add('forname');
-			divForname.innerText = visite.querySelector('prénom').textContent;
+			divForname.innerText = patient.querySelector('prénom').textContent;
 			div.appendChild( divForname );
 		// return the root div
 		 return div;
