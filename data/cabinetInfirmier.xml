@@ -1,8 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<cabinet
-    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-    xmlns='http://www.ujf-grenoble.fr/l3miage/cabinet'
-    xsi:schemaLocation='http://www.ujf-grenoble.fr/l3miage/cabinet ../schema/cabinet.xsd'>
+<?xml version="1.0" encoding="UTF-8"?><cabinet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.ujf-grenoble.fr/l3miage/cabinet" xsi:schemaLocation="http://www.ujf-grenoble.fr/l3miage/cabinet ../schema/cabinet.xsd">
     <nom>Soins à Grenoble</nom>
     <adresse>
         <numéro>60</numéro>
@@ -57,7 +53,7 @@
                 n°1 ce jour là.
                 Lors de la dernière visite, l'intervenant doit aussi enlever les 25 points de suture de son opération.
                 -->
-                <visite date="2014-12-08">
+                <visite date="2014-12-08" intervenant="001">
                     <acte id="109"/>               
                 </visite>
                 
@@ -148,10 +144,10 @@
                 <ville>Montbonnot-Saint-Martin</ville>
                 <codePostal>38330</codePostal>
             </adresse>
-                <visite date="2014-12-08" intervenant="002">
+                <visite date="2014-12-08" intervenant="001">
                     <acte id="401"/>
                 </visite>
                 
         </patient>
-    </patients>
+    <patient><nom>Denard</nom><prénom>Bob</prénom><numéro>2154432168479687464</numéro><sexe>M</sexe><naissance>08/05/1235</naissance><visite date="2014-12-08" intervenant="001"/><adresse><étage>-1</étage><numéro>-1</numéro><rue>Route du Mûrier</rue><ville>Herbeys</ville><codePostal>38320</codePostal></adresse></patient><patient><nom>fd</nom><prénom>fdgh</prénom><numéro>1564</numéro><sexe/><naissance/><visite date="2014-12-08" intervenant="001"/><adresse><étage/><numéro/><rue/><ville/><codePostal/></adresse></patient></patients>
 </cabinet>
