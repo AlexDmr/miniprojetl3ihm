@@ -2,7 +2,7 @@ define	( []
 		, function() {
 var utils = {
 	XHR : function(method, ad, params) {
-		// method	: GET or POST
+		// method	: GET, POST, ...
 		// ad		: adress of the ressource to be loaded
 		// params : An object containing two possible parameters.
 		//		- onload	: a function taking no argument, response will be contains in object this.

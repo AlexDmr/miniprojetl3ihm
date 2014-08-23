@@ -59,6 +59,36 @@ var RRServer = {
 								.use( this.bodyParser.json() )
 								.use( this.multer({ dest: './uploads/'}) )
 								.listen(port) ;
+		 this.app.get( '/'
+					 , function(req, res) {
+						 // console.log('Getting /');
+						 self.fs.readFile(__dirname + '/start.html',
+							  function (err, data) {
+								if (err) {
+									 res.writeHead(500);
+									 return res.end('Error loading start.html : ', err);
+									}
+								// console.log('start.html read');
+								// Parse it so that we can add secretary and all nurses
+								var doc = self.domParser.parseFromString( data.toString() );
+								var datalist = doc.getElementById('logins');
+								var L_nurses = self.doc.getElementsByTagName('infirmier');
+								for(var i=0; i<L_nurses.length; i++) {
+									 var option = doc.createElement('option');
+									 option.setAttribute( 'value', L_nurses[i].getAttribute('id') );
+									 option.textContent = L_nurses[i].getElementsByTagName('prénom')[0].textContent
+														  + ' '
+														  + L_nurses[i].getElementsByTagName('nom')[0].textContent
+														;
+									 datalist.appendChild(option);
+									}
+								// console.log( self.xmlSerializer.serializeToString(datalist) )
+								res.writeHead(200);
+								res.write( self.xmlSerializer.serializeToString(doc) );
+								res.end();
+							  });
+						}
+					 );
 		 this.app.post('/', function(req, res) {
 				 // POST contains a login that identify the secretary or one nurse
 				 // Depending on the login, transmit the right webpage
@@ -181,16 +211,14 @@ var RRServer = {
 							}
 				);
 		 this.app.post('/INFIRMIERE', function(req, res) {
-							 DistributionState.fs.readFile(__dirname + '/infirmiere',
-								  function (err, data) {
-									if (err) {
-										 res.writeHead(500);
-										 return res.end('Error loading infirmiere');
-										}
-									res.writeHead(200);
-									res.write( data.toString() );
-									res.end();
-								  });
+							 var node = self.doc.getElementById(req.body.id);
+							 if(node) {
+								 res.writeHead	(200, {'Content-type': 'text/xml; charset=utf-8'} );
+								 res.write( self.xmlSerializer.serializeToString(node) );
+								} else {res.writeHead	(400, {'Content-type': 'text/plain; charset=utf-8'} );
+										res.write( "Unknown id " + req.body.id);
+									   }
+							 res.end();
 							}
 				);
 
