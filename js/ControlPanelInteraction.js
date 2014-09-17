@@ -217,12 +217,12 @@ var ControlPanelInteraction = {
 		// Name
 		 var divName = document.createElement('div');
 			divName.classList.add('name');
-			divName.innerText = patient.querySelector('nom').textContent;
+			divName.appendChild( document.createTextNode(patient.querySelector('nom').textContent) );
 			div.appendChild( divName );
 		// Forname
 		 var divForname = document.createElement('div');
 			divForname.classList.add('forname');
-			divForname.innerText = patient.querySelector('prénom').textContent;
+			divForname.appendChild( document.createTextNode(patient.querySelector('prénom').textContent) );
 			div.appendChild( divForname );
 		// return the root div
 		 return div;
