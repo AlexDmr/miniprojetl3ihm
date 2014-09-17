@@ -208,7 +208,10 @@ var ControlPanelInteraction = {
 			div.setAttribute('draggable', 'true');
 			div.setAttribute('id', patient.querySelector('numéro').textContent);
 			div.addEventListener	( 'dragstart'
-									, function() {self.draggingPatientCard = {htmlElement: div, patient: patient};}
+									, function(e) {
+										 self.draggingPatientCard = {htmlElement: div, patient: patient};
+										 e.dataTransfer.setData('Text', this.id); 
+										}
 									, false );
 			div.addEventListener	( 'dragend'
 									, function() {self.draggingPatientCard = null;}
