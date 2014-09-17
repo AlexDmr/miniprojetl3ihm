@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DistanceMatrixResponse>
+ <status>OK</status>
+ <origin_address>46 Avenue Félix Viallet, IUT 2, 38031 Grenoble, France</origin_address>
+ <origin_address>Rond-point de la Croix de Vie, 38700 La Tronche, France</origin_address>
+ <origin_address>Rue Casimir Brenier, 38000 Grenoble, France</origin_address>
+ <origin_address>25 Rue des Martyrs, 38000 Grenoble, France</origin_address>
+ <destination_address>46 Avenue Félix Viallet, IUT 2, 38031 Grenoble, France</destination_address>
+ <destination_address>Rond-point de la Croix de Vie, 38700 La Tronche, France</destination_address>
+ <destination_address>Rue Casimir Brenier, 38000 Grenoble, France</destination_address>
+ <destination_address>25 Rue des Martyrs, 38000 Grenoble, France</destination_address>
+ <row>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>0</value>
+    <text>1 min</text>
+   </duration>
+   <distance>
+    <value>0</value>
+    <text>1 m</text>
+   </distance>
+  </element>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>481</value>
+    <text>8 mins</text>
+   </duration>
+   <distance>
+    <value>3430</value>
+    <text>3.4 km</text>
+   </distance>
+  </element>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>48</value>
+    <text>1 min</text>
+   </duration>
+   <distance>
+    <value>224</value>
+    <text>0.2 km</text>
+   </distance>
+  </element>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>473</value>
+    <text>8 mins</text>
+   </duration>
+   <distance>
+    <value>3000</value>
+    <text>3.0 km</text>
+   </distance>
+  </element>
+ </row>
+ <row>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>534</value>
+    <text>9 mins</text>
+   </duration>
+   <distance>
+    <value>3345</value>
+    <text>3.3 km</text>
+   </distance>
+  </element>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>0</value>
+    <text>1 min</text>
+   </duration>
+   <distance>
+    <value>0</value>
+    <text>1 m</text>
+   </distance>
+  </element>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>582</value>
+    <text>10 mins</text>
+   </duration>
+   <distance>
+    <value>3569</value>
+    <text>3.6 km</text>
+   </distance>
+  </element>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>842</value>
+    <text>14 mins</text>
+   </duration>
+   <distance>
+    <value>5625</value>
+    <text>5.6 km</text>
+   </distance>
+  </element>
+ </row>
+ <row>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>64</value>
+    <text>1 min</text>
+   </duration>
+   <distance>
+    <value>310</value>
+    <text>0.3 km</text>
+   </distance>
+  </element>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>470</value>
+    <text>8 mins</text>
+   </duration>
+   <distance>
+    <value>3337</value>
+    <text>3.3 km</text>
+   </distance>
+  </element>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>0</value>
+    <text>1 min</text>
+   </duration>
+   <distance>
+    <value>0</value>
+    <text>1 m</text>
+   </distance>
+  </element>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>513</value>
+    <text>9 mins</text>
+   </duration>
+   <distance>
+    <value>2907</value>
+    <text>2.9 km</text>
+   </distance>
+  </element>
+ </row>
+ <row>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>306</value>
+    <text>5 mins</text>
+   </duration>
+   <distance>
+    <value>2543</value>
+    <text>2.5 km</text>
+   </distance>
+  </element>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>703</value>
+    <text>12 mins</text>
+   </duration>
+   <distance>
+    <value>5569</value>
+    <text>5.6 km</text>
+   </distance>
+  </element>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>290</value>
+    <text>5 mins</text>
+   </duration>
+   <distance>
+    <value>2326</value>
+    <text>2.3 km</text>
+   </distance>
+  </element>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>0</value>
+    <text>1 min</text>
+   </duration>
+   <distance>
+    <value>0</value>
+    <text>1 m</text>
+   </distance>
+  </element>
+ </row>
+</DistanceMatrixResponse>

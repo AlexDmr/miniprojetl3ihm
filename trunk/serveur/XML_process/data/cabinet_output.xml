@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<cabinet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.ujf-grenoble.fr/l3miage/cabinet ../schema/cabinet.xsd">
+    <nom>Soins a Grenoble</nom>
+    <adresse>
+        <numero>60</numero>
+        <rue>rue de la Chimie</rue>
+        <ville>Grenoble</ville>
+        <codePostal>38041</codePostal>
+    </adresse>
+    <infirmiers>
+        <infirmier id="001">
+            <nom>Versaire</nom>
+            <prenom>Annie</prenom>
+            <photo>annie.jpg</photo>
+        </infirmier>
+        <infirmier id="002">
+            <nom>Cent</nom>
+            <prenom>Sally</prenom>
+            <photo>sally.jpg</photo>
+        </infirmier>
+        <infirmier id="003">
+            <nom>Nouie</nom>
+            <prenom>Eva</prenom>
+            <photo>eva.jpg</photo>
+        </infirmier>
+    </infirmiers>
+    <patients>
+        <patient>
+            <nom>Aire</nom>
+            <prenom>Axel</prenom>
+            <sexe>M</sexe>
+            <naissance>1993-06-13</naissance>
+            
+            <numero>193061305545319</numero>
+            <adresse>
+                <etage>4</etage>
+                <numero>46</numero>
+                <rue>avenue Felix Viallet</rue>
+                <ville>Grenoble</ville>
+                <codePostal>38031</codePostal>            
+            </adresse>
+            <visites>
+                
+                
+                
+                <visite date="2014-12-08">
+                    <acte id="109"/>               
+                </visite>
+                <visite date="2014-12-09" intervenant="001">
+                    <acte id="109"/>               
+                </visite>
+                <visite date="2014-12-10" intervenant="002">
+                    <acte id="109"/>               
+                </visite>
+                <visite date="2014-12-11" intervenant="001">
+                    <acte id="109"/>               
+                </visite>
+                <visite date="2014-12-12" intervenant="001">
+                    <acte id="202"/>
+                    <acte id="109"/>               
+                </visite>
+            </visites>
+        </patient>
+        <patient>        
+            <nom>Orouge</nom>
+            <prenom>Elvire</prenom>
+            <sexe>F</sexe>
+            <naissance>1980-03-08</naissance>
+            
+            <numero>280036902305219</numero>        
+            <adresse>
+                <rue>Rond-Point de la Croix de Vie</rue> 
+                <ville>La Tronche</ville>
+                <codePostal>38700</codePostal>           
+            </adresse>
+            <visites>               
+                
+                <visite date="2014-12-08" intervenant="001">
+                    <acte id="300"/>               
+                </visite>
+                <visite date="2014-12-10" intervenant="002">
+                    <acte id="300"/>               
+                </visite>
+                <visite date="2014-12-12" intervenant="001">
+                    <acte id="300"/>               
+                </visite>
+            </visites>
+        </patient>
+        <patient>        
+            <nom>Oscare</nom>
+            <prenom>Pien</prenom>
+            <sexe>M</sexe>
+            <naissance>1975-10-25</naissance>
+            
+            <numero>175107306569267</numero>
+            <adresse>
+                <rue>rue Casimir Brenier</rue>
+                <ville>Grenoble</ville>
+                <codePostal>38000</codePostal>
+            </adresse>
+            <visites>               
+                
+                <visite date="2014-12-08" intervenant="001">
+                    <acte id="101"/>
+                    <acte id="104"/>               
+                </visite>
+                <visite date="2014-12-09" intervenant="001">
+                    <acte id="104"/>               
+                </visite>
+                <visite date="2014-12-10" intervenant="002">
+                    <acte id="104"/>               
+                </visite>
+                <visite date="2014-12-11" intervenant="001">
+                    <acte id="104"/>               
+                </visite>
+                <visite date="2014-12-12" intervenant="001">
+                    <acte id="104"/>               
+                </visite>
+            </visites>
+        </patient>
+        <patient>        
+            <nom>Xavier</nom>
+            <prenom>Kapoetla</prenom>
+            <sexe>M</sexe>
+            <naissance>2010-08-02</naissance>
+            
+            <numero>110083306303570</numero>
+            <adresse>
+                <numero>25</numero>
+                <rue>rue des Martyrs</rue>
+                <ville>Grenoble</ville>
+                <codePostal>38042</codePostal>
+            </adresse>
+            <visites>               
+                
+                <visite date="2014-12-08" intervenant="001">
+                    <acte id="111"/>               
+                </visite>
+                <visite date="2014-12-09" intervenant="001">
+                    <acte id="111"/>               
+                </visite>
+                <visite date="2014-12-10" intervenant="002">
+                    <acte id="111"/>               
+                </visite>
+                <visite date="2014-12-11" intervenant="001">
+                    <acte id="111"/>               
+                </visite>
+                <visite date="2014-12-12" intervenant="001">
+                    <acte id="111"/>               
+                </visite>
+            </visites>
+        </patient>
+        <patient>
+            <nom>Peplu</nom>
+            <prenom>Jean</prenom>
+            <sexe>M</sexe>
+            <naissance>1910-08-02</naissance>
+            
+            <numero>110082516002010</numero>
+            <adresse>            
+                <numero>655</numero>
+                <rue>Avenue de l'Europe</rue>
+                <ville>Montbonnot-Saint-Martin</ville>
+                <codePostal>38330</codePostal>
+            </adresse>
+            <visites>
+                <visite date="2014-12-09" intervenant="002">
+                    <acte id="401"/>
+                </visite>
+                <visite date="2014-12-10" intervenant="002">
+                    <acte id="402"/>
+                    <acte id="403"/>
+                </visite>
+                <visite date="2014-12-10" intervenant="002">
+                    <acte id="403"/>
+                </visite>
+                <visite date="2014-12-11" intervenant="002">
+                    <acte id="403"/>
+                </visite>
+                <visite date="2014-12-12" intervenant="002">
+                    <acte id="403"/>
+                </visite>
+            </visites>
+        </patient>
+    </patients>
+</cabinet>
