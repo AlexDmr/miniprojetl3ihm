@@ -178,11 +178,16 @@ var ControlPanelInteraction = {
 											 var patient		= self.draggingPatientCard.patient
 											   , patientNumber	= patient.querySelector('numéro').textContent;
 											 utils.XHR( 'POST', '/affectation'
-													  , { onload		: function() {console.log("/affectation =>", this);}
+													  , { onload		: function() {
+															 console.log("/affectation =>", this);
+															}
 													    , variables	: {infirmier:nurseId, patient: patientNumber}
 													    }
 													  );
 											}
+										 evt.stopPropagation();
+										 evt.preventDefault();
+										 return false;
 										}
 									 , false );
 		}
