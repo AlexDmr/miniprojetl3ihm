@@ -101,7 +101,7 @@
                 jour et injection intraveineuse directe isolée d'anthalgiques les 
                 autres jours.
                 -->
-                <visite date="2014-12-08" intervenant="001">
+                <visite date="2014-12-08" intervenant="003">
                     <acte id="101"/>
                     <acte id="104"/>               
                 </visite>
@@ -125,7 +125,7 @@
                 Le jeune Xavier est en cours de désensibilation alergique.
                 Il doit recevoir tous les jours, l'injection de plusieurs allergènes, etc.
                 -->
-                <visite date="2014-12-08" intervenant="001">
+                <visite date="2014-12-08" intervenant="">
                     <acte id="111"/>               
                 </visite>
                 
@@ -149,5 +149,5 @@
                 </visite>
                 
         </patient>
-    <patient><nom>Denard</nom><prénom>Bob</prénom><numéro>2154432168479687464</numéro><sexe>M</sexe><naissance>08/05/1235</naissance><visite date="2014-12-08" intervenant="001"/><adresse><étage>-1</étage><numéro>-1</numéro><rue>Route du Mûrier</rue><ville>Herbeys</ville><codePostal>38320</codePostal></adresse></patient><patient><nom>fd</nom><prénom>fdgh</prénom><numéro>1564</numéro><sexe/><naissance/><visite date="2014-12-08" intervenant="001"/><adresse><étage/><numéro/><rue/><ville/><codePostal/></adresse></patient></patients>
+    <patient><nom>Denard</nom><prénom>Bob</prénom><numéro>2154432168479687464</numéro><sexe>M</sexe><naissance>08/05/1235</naissance><visite date="2014-12-08" intervenant=""/><adresse><étage>-1</étage><numéro>-1</numéro><rue>Route du Mûrier</rue><ville>Herbeys</ville><codePostal>38320</codePostal></adresse></patient><patient><nom>fd</nom><prénom>fdgh</prénom><numéro>1564</numéro><sexe/><naissance/><visite date="2014-12-08" intervenant="002"/><adresse><étage/><numéro/><rue/><ville/><codePostal/></adresse></patient><patient><nom>sdf&lt;ghh</nom><prénom>lkjlkj</prénom><numéro>2361489647614</numéro><sexe>;jlkj</sexe><naissance>2014-09-19</naissance><visite date="2014-12-08" intervenant="002"/><adresse><étage>sdfgh</étage><numéro>sdfgh</numéro><rue>4 Chemin de la Côte Fauchée</rue><ville>Champagnier</ville><codePostal>38800</codePostal></adresse></patient></patients>
 </cabinet>
