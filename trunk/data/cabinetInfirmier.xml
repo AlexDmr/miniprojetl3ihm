@@ -39,23 +39,23 @@
                 <ville>Grenoble</ville>
                 <codePostal>38031</codePostal>            
             </adresse>
-                <!-- Ici, j'ai choisi d'identifier l'infirmière par un numéro.
-                Un prénom peut porter à confusion.
-                Un login peut être ok -->
+            <!-- Ici, j'ai choisi d'identifier l'infirmière par un numéro.
+            Un prénom peut porter à confusion.
+            Un login peut être ok -->
                 
-                <!-- 
-                Axel a eu un accident de moto à cause duquel il a dû être opéré.
-                Il est immobilisé pour un mois et doit donc recevoir des injections
-                sous-cutanées d'anti-coagulant tous les jours pendant une semaine pour éviter les flébites.
-                (Q: Peut-on ajouter la contrainte qu'elles doievent être faites à la même heure chaque jour ?)
-                L'intervenant qui prend en charge Axel est le n°2. Cet intervenant
-                ne travaille pas le mercredi et doit donc céder sa place à l'intervenant
-                n°1 ce jour là.
-                Lors de la dernière visite, l'intervenant doit aussi enlever les 25 points de suture de son opération.
-                -->
-                <visite date="2014-12-08" intervenant="001">
-                    <acte id="109"/>               
-                </visite>
+            <!-- 
+            Axel a eu un accident de moto à cause duquel il a dû être opéré.
+            Il est immobilisé pour un mois et doit donc recevoir des injections
+            sous-cutanées d'anti-coagulant tous les jours pendant une semaine pour éviter les flébites.
+            (Q: Peut-on ajouter la contrainte qu'elles doievent être faites à la même heure chaque jour ?)
+            L'intervenant qui prend en charge Axel est le n°2. Cet intervenant
+            ne travaille pas le mercredi et doit donc céder sa place à l'intervenant
+            n°1 ce jour là.
+            Lors de la dernière visite, l'intervenant doit aussi enlever les 25 points de suture de son opération.
+            -->
+            <visite date="2014-12-08" intervenant="001">
+                <acte id="109"/>               
+            </visite>
                 
         </patient>
         <patient>        
@@ -71,15 +71,15 @@
                 <ville>La Tronche</ville>
                 <codePostal>38700</codePostal>           
             </adresse>
-              <!-- 
-                Elvire a été gravement brulée, et l'intervenant doit changer son 
-                pansement tous les 2 jours
-                (Pansement de brûlure étendue ou de plaie chimique ou thermique étendue,
-                    sur une surface supérieure à 5 % de la surface corporelle.....)
-                -->
-                <visite date="2014-12-08" intervenant="001">
-                    <acte id="300"/>               
-                </visite>
+            <!-- 
+            Elvire a été gravement brulée, et l'intervenant doit changer son 
+            pansement tous les 2 jours
+            (Pansement de brûlure étendue ou de plaie chimique ou thermique étendue,
+                sur une surface supérieure à 5 % de la surface corporelle.....)
+            -->
+            <visite date="2014-12-08" intervenant="001">
+                <acte id="300"/>               
+            </visite>
                 
         </patient>
         <patient>        
@@ -95,16 +95,16 @@
                 <ville>Grenoble</ville>
                 <codePostal>38000</codePostal>
             </adresse>
-                <!-- 
-                Oscar s'est cassé l'os du pied en jouant au foot. d
-                Il a besoin d'un prélèvement par ponction veineuse directe le premier
-                jour et injection intraveineuse directe isolée d'anthalgiques les 
-                autres jours.
-                -->
-                <visite date="2014-12-08" intervenant="003">
-                    <acte id="101"/>
-                    <acte id="104"/>               
-                </visite>
+            <!-- 
+            Oscar s'est cassé l'os du pied en jouant au foot. d
+            Il a besoin d'un prélèvement par ponction veineuse directe le premier
+            jour et injection intraveineuse directe isolée d'anthalgiques les 
+            autres jours.
+            -->
+            <visite date="2014-12-08" intervenant="001">
+                <acte id="101"/>
+                <acte id="104"/>               
+            </visite>
                 
         </patient>
         <patient>        
@@ -121,13 +121,13 @@
                 <ville>Grenoble</ville>
                 <codePostal>38042</codePostal>
             </adresse>
-                <!-- 
-                Le jeune Xavier est en cours de désensibilation alergique.
-                Il doit recevoir tous les jours, l'injection de plusieurs allergènes, etc.
-                -->
-                <visite date="2014-12-08" intervenant="">
-                    <acte id="111"/>               
-                </visite>
+            <!-- 
+            Le jeune Xavier est en cours de désensibilation alergique.
+            Il doit recevoir tous les jours, l'injection de plusieurs allergènes, etc.
+            -->
+            <visite date="2014-12-08" intervenant="001">
+                <acte id="111"/>               
+            </visite>
                 
         </patient>
         <patient>
@@ -144,10 +144,10 @@
                 <ville>Montbonnot-Saint-Martin</ville>
                 <codePostal>38330</codePostal>
             </adresse>
-                <visite date="2014-12-08" intervenant="001">
-                    <acte id="401"/>
-                </visite>
+            <visite date="2014-12-08" intervenant="001">
+                <acte id="401"/>
+            </visite>
                 
         </patient>
-    <patient><nom>Denard</nom><prénom>Bob</prénom><numéro>2154432168479687464</numéro><sexe>M</sexe><naissance>08/05/1235</naissance><visite date="2014-12-08" intervenant=""/><adresse><étage>-1</étage><numéro>-1</numéro><rue>Route du Mûrier</rue><ville>Herbeys</ville><codePostal>38320</codePostal></adresse></patient><patient><nom>fd</nom><prénom>fdgh</prénom><numéro>1564</numéro><sexe/><naissance/><visite date="2014-12-08" intervenant="002"/><adresse><étage/><numéro/><rue/><ville/><codePostal/></adresse></patient><patient><nom>sdf&lt;ghh</nom><prénom>lkjlkj</prénom><numéro>2361489647614</numéro><sexe>;jlkj</sexe><naissance>2014-09-19</naissance><visite date="2014-12-08" intervenant="002"/><adresse><étage>sdfgh</étage><numéro>sdfgh</numéro><rue>4 Chemin de la Côte Fauchée</rue><ville>Champagnier</ville><codePostal>38800</codePostal></adresse></patient></patients>
+    <patient><nom>Fouarda</nom><prénom>Céline</prénom><numéro>0399555850294</numéro><sexe>F</sexe><naissance>E04959</naissance><visite date="2014-12-08"/><adresse><étage>5</étage><numéro>5</numéro><rue>71 Boulevard Clémenceau</rue><ville>Grenoblre</ville><codePostal>38100</codePostal></adresse></patient></patients>
 </cabinet>
