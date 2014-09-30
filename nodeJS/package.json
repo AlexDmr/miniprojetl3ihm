@@ -7,7 +7,7 @@
 					}
 	, "dependencies": {
           "fs-extra"	: ">=0.8"
-		, "express"		: ">=3"
+		, "express"		: ">=4.9"
 		, "xmldom"		: ">=0.1.18"
 		, "request"		: ">=2.33"
 		, "body-parser"	: ">=1.4.3"
