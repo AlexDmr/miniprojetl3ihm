@@ -2,11 +2,15 @@
 Projet à tester sous Linux
     
     A) Installer  les librairies nécessaires
-- installation de libXML++ (pour la partie Langages pour le Web)
+- installation de curl (pour traduire les requêtes GoogleMap)
+    > 
+- installation de libXML++ 2.6 (pour la partie Langages pour le Web)
     > sudo apt-get install libxml++-dev
         
 - installation des librairies NodeJS
-    > à compléter par Alexandre, je ne me rappelle plus comment j'avais fait, mais ça marche chez moi...'
+    > aller sur http://nodejs.org/
+    > installer les librairies javascript nécessaires
+
             
     B) Récupération du code de correction sur SVN         
 - Récupération du code:
@@ -47,11 +51,18 @@ Projet à tester sous Linux
 2- Lancer le serveur NodeJS
     Dans le répertoire nodeJS, lancer le serveur nodeJS avec la commande
     > node ./staticServeur.js port:8080
-3- Lancer NetBeans et configurer le proxy
+3- Lancer NetBeans et 
+4- configurer le proxy
     -> aller dans Tools->Options (ou Edit->Preferences selon les versions) puis Advanced->Network->Settings
     -> Choisir "Manual proxy configuration"
     -> dans HTTP Porxy: taper localhost 
     -> dans Port: taper 8000
+5- interdire la persistance des connections
+    -> taper about:config dans la barre d'url
+    -> dans network.http.proxy.version mettre 1.0 
+    -> dans network.http.keep-alive.timeout mettre 0 
+
+
 4- Dans NetBeans, lancer le client localhost
    -> dans l'URL, taper "http://localhost:8080"
 

@@ -125,7 +125,7 @@
             Le jeune Xavier est en cours de désensibilation alergique.
             Il doit recevoir tous les jours, l'injection de plusieurs allergènes, etc.
             -->
-            <visite date="2014-12-08" intervenant="001">
+            <visite date="2014-12-08" intervenant="002">
                 <acte id="111"/>               
             </visite>
                 
