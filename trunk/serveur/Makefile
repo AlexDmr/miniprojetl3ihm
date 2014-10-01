@@ -2,8 +2,8 @@ CC=g++
 CFLAGS= -Wall -Wextra
 XMLPREFIX=./XML_process
 OBJS=proxy-L3.o $(XMLPREFIX)/LwSaxParser.o $(XMLPREFIX)/FromXMLToGoogleMapHTTPRequest.o $(XMLPREFIX)/FromGoogleMapXMLToDistanceTable.o $(XMLPREFIX)/SortVisits.o
-INCLUDEFLAGS= -I$(XMLPREFIX) $(shell pkg-config --cflags libxml++-2.6)
-LDLIBS=$(shell pkg-config --libs libxml++-2.6)
+INCLUDEFLAGS= -I$(XMLPREFIX) $(shell pkg-config --cflags libxml++-2.6) -I/opt/local/include/curl
+LDLIBS=-L/opt/local/lib $(shell pkg-config --libs libxml++-2.6) -lcurl
 
 all: proxy-L3
 

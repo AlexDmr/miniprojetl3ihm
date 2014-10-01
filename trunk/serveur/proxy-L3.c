@@ -50,8 +50,9 @@ Not to be distributed for profit, or indeed at all, without permission.
 /*                                   \                                      */
 /*                                    \__> GoogleMaps API                   */
 
-// Numero de port pour le serveur HTTP
-#define PORT_HTTP 5555
+
+// Numero de port pour le serveur HTTP 
+#define PORT_HTTP 8080
 // Nb max de requetes a faire au serveur Google Distance Matrix (i.e. nb max 
 // de deplacements indiques par le serveur HTTP)
 #define MAXREQ 50
@@ -469,7 +470,7 @@ void process_nurse_request(int fd, int id, char name_serv_http[128]){
 // dans la variable globale "buffer"):
 int get_next_line(int current_index, char line[120]){
   int i=current_index, j=0;
-  while (buffer[i]!='\r' && buffer[i]!='\n'){
+  while (buffer[i]!='\r' && buffer[i]!='\n' && buffer[i]!='\0'){
     line[j++]=(char)toupper((int)buffer[i++]);
   } 
   line[j]='\0';
@@ -483,7 +484,7 @@ int get_next_line(int current_index, char line[120]){
 //     role de serveur metier (appel de la fonction process_nurse_request) 
 //   - sinon, on joue le role de proxy (appel de la fonction communicate)
 int fdserve(int fd){
-  char buf2[512], line[120], host[128], action[15];
+  char buf2[512], line[120], host[128], action[150];
   struct sockaddr_in sin;
   int rfd; /* request destination */
   int n;
@@ -517,7 +518,7 @@ int fdserve(int fd){
   printf("COMMANDE = %s\n", cmd);
 
   // Si commande invalide:
-  if(strcmp(cmd,"GET")&&strcmp(cmd,"POST"))  {
+  if (strcmp(cmd,"GET")&&strcmp(cmd,"POST"))  {
     if(debug) printf("Not a GET or POST command\n");
     if(lfp) { fprintf(lfp,"Bad command [%s] received.\n---------\n",cmd);
       fprintf(lfp,"%s\n----------\n",buffer);fflush(lfp); }
@@ -529,18 +530,19 @@ int fdserve(int fd){
     // Si commande POST, on gere le cas de "POST /INFIRMIERE HTTP/1.1":
     if (!strcmp(cmd,"POST")) {
       // lecture de l'action derriere "POST":
-      for(j=0,i++;i<30;i++)
+      for(j=0,i++;i<150;i++)
 	if(buffer[i] && (buffer[i]!=' ')) {
 	  action[j++]=(char)toupper((int)buffer[i]);
 	} else break;
       action[j]='\0';
-      if (!strcmp(action, "/INFIRMIERE")){
+      // recherche de la chaine /INFIRMIERE:
+      if (strstr(action, "/INFIRMIERE") != NULL){     
 	nurse=1;
 	// lecture de l'id de l'infirmiere (recherche de la ligne qui 
         // commence par id=..) et recuperation de la valeur :
 	while (buffer[i]!='\r' && buffer[i++]!='\n') ;
 	current_index=get_next_line(i, line);
-	while (strstr(line, "ID=")!=line && current_index<n){	
+	while ((strstr(line, "ID=")!=line || !line) && current_index<n){	
 	  current_index=get_next_line(current_index, line);
 	}
 	if (strstr(line, "ID=")==line){
@@ -553,6 +555,7 @@ int fdserve(int fd){
       }
     }
   if (!nurse){   // Dans tous les autres cas, on joue le proxy ordinaire:
+    printf("Processing other request...\n");
     /* identify where to go to */
     /* GET http://hostname[:port][blurfl....]\n */
     for(url=buffer;*url && (*url!='/');url++) ;
@@ -569,7 +572,7 @@ int fdserve(int fd){
     }
     for(rest=url;*rest && (*rest!='\n');rest++) ;
     if(*rest){ *rest='\0'; rest++; }      
-    if(debug) printf("%s http://%s:%d%s\n",cmd,host,portnum,url);
+    if(debug) printf("==== %s http://%s:%d%s === \n",cmd,host,portnum,url);
     if(lfp) { fprintf(lfp,"%s http://%s:%d%s\n",cmd,host,portnum,url);
       fflush(lfp); }
     
@@ -682,7 +685,7 @@ int main(int argc, char *argv[]){
 
   // Recherche infos sur HTTP dans /etc/services :
   sss = getservbyname("http","tcp");
-  httpport=(sss?(u_short)htons(sss->s_port):80);
+  httpport=(sss?(u_short)htons(sss->s_port):80);     // Verifier ce que ca fait exactement !!!!!!!
   if(debug) printf("Using http port [%-10.10s] %d\n",sss->s_name,httpport);
 
   /* open port to listen to */
