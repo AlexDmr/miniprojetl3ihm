@@ -14,10 +14,11 @@ int main(int argc, char *argv[]) {
     }
     char * filename = argv[1];
     char * id = argv[2];
+    int idInt = 2;
     
     FromXMLToGoogleMapHTTPRequest dataBaseParser(id);
     FromGoogleMapXMLToDistanceTable googleMapParser;
-    SortVisits sorter(id);
+    SortVisits sorter;
     std::vector<std::string> adresses;
     std::vector< std::vector<int> > distances;
     
@@ -30,7 +31,8 @@ int main(int argc, char *argv[]) {
         std::cout << "1 obtenir la requête HTTP à envoyer à GoogleMap pour récupérer les matrices de distances entre les adresses " << std::endl;
         std::cout << "2 créer un tableau c++ à partir du fichier XML renvoyé par GoogleMap " << std::endl;
         std::cout << "3 Modifier la base de données XML donnée avec une liste d'adresses ordonnées pour une infirmière" << std::endl;
-        std::cout << "Veuillez taper 0, 1, 2 ou 3" << std::endl;
+        std::cout << "4 Créer un document HTML à partir du doc XML de base de données et du résultat de l'ordonnancement des adresses " << std::endl;
+        std::cout << "Veuillez taper 0, 1, 2, 3 ou 4" << std::endl;
         std::cout << "-------------------------------------------" << std::endl;
         
         std::cin >> option;
@@ -108,6 +110,11 @@ int main(int argc, char *argv[]) {
                 case 3: // Modifier la base de données XML donnée avec une liste d'adresses ordonnées pour une infirmière
                     sorter.modifyFile(filename, adresses);
                     break;
+                    
+                case 4: // Display the HTML file
+                    sorter.saveXHTMLFile(filename, "data/test.html", idInt);
+                    break;
+                    
             default:
                 option = -1;
                 break;

@@ -51,7 +51,7 @@ Projet à tester sous Linux
 2- Lancer le serveur NodeJS
     Dans le répertoire nodeJS, lancer le serveur nodeJS avec la commande
     > node ./staticServeur.js port:8080
-3- Lancer NetBeans et 
+3- Lancer Firefox et 
 4- configurer le proxy
     -> aller dans Tools->Options (ou Edit->Preferences selon les versions) puis Advanced->Network->Settings
     -> Choisir "Manual proxy configuration"
