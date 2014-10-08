@@ -1,7 +1,7 @@
 CC=g++
 CFLAGS= -Wall -Wextra
 INCLUDEFLAGS= $(shell pkg-config --cflags libxml++-2.6) -I/opt/local/include/curl
-LDLIBS=$(shell pkg-config --libs libxml++-2.6) -lcurl 
+LDLIBS=$(shell pkg-config --libs libxml++-2.6) -lcurl -lxslt
 
 all: testParsers
 

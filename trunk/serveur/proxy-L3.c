@@ -18,6 +18,7 @@
 
 #include "FromXMLToGoogleMapHTTPRequest.h"
 #include "FromGoogleMapXMLToDistanceTable.h"
+#include "SortVisits.h"
 #include <fstream>
 
 
@@ -306,7 +307,8 @@ void set_header_request_distmatrix(int id, char req[1024]){
 
 // Fonction de traitement resultant du code de Celine (elle place tout dans 
 // un fichier, qu'on va faire passer au client) 
-void process_matrix (char *nomficres){ 
+void process_matrix (char *nomficres, int id){ 
+  SortVisits sorter;    
   FromGoogleMapXMLToDistanceTable googleMapParser;
   std::vector<std::string> adresses;
   std::vector< std::vector<int> > distances;
@@ -315,48 +317,50 @@ void process_matrix (char *nomficres){
   f.open(nomficres);
   adresses = googleMapParser.getAdresses();
   distances = googleMapParser.getDistances();
-  for (unsigned int i = 0; i < adresses.size(); i++)
-    {
-      f << "| " << i << " | " << adresses.at(i) << " | " << std::endl;
-    }
-  f << std::endl;
-  f << std::endl;
-  // ??crire le tableau des distances avec les index                                                                                     
-  f << "     | ";
-  for(unsigned int c = 0; c < adresses.size(); c++) {
-    std::string spacesBefore = "";
-    if (c < 10)
-      spacesBefore = "   ";
-    else if (c < 100)
-      spacesBefore = "  ";
-    else if (c < 1000)
-      spacesBefore = " ";
-    else
-      spacesBefore = "";
-
-    f << spacesBefore << c <<  " | ";
-  }
-  f << std::endl << "  --------------------------------" << std::endl;
-  for (unsigned int ligne = 0; ligne < adresses.size(); ligne++)
-    {
-      f << "   " << ligne << " | ";
-      for (unsigned int colonne = 0; colonne < adresses.size(); colonne++)
-	{
-	  int value = (distances.at(ligne)).at(colonne);
-	  std::string spacesBefore = "";
-	  if (value < 10)
-	    spacesBefore = "   ";
-	  else if (value < 100)
-	    spacesBefore = "  ";
-	  else if (value < 1000)
-	    spacesBefore = " ";
-	  else
-	    spacesBefore = "";
-	  f << spacesBefore << value << " | ";
-	}
-      f << std::endl << "  --------------------------------" << std::endl;
-    }
-  f.close();
+  sorter.modifyFile("char * filename", adresses);
+  sorter.saveXHTMLFile("data/cabinetInfirmier.xml", nomficres, id);
+    //   for (unsigned int i = 0; i < adresses.size(); i++)
+    //     {
+    //       f << "| " << i << " | " << adresses.at(i) << " | " << std::endl;
+    //     }
+    //   f << std::endl;
+    //   f << std::endl;
+    //   // ??crire le tableau des distances avec les index
+    //   f << "     | ";
+    //   for(unsigned int c = 0; c < adresses.size(); c++) {
+    //     std::string spacesBefore = "";
+    //     if (c < 10)
+    //       spacesBefore = "   ";
+    //     else if (c < 100)
+    //       spacesBefore = "  ";
+    //     else if (c < 1000)
+    //       spacesBefore = " ";
+    //     else
+    //       spacesBefore = "";
+    //
+    //     f << spacesBefore << c <<  " | ";
+    //   }
+    //   f << std::endl << "  --------------------------------" << std::endl;
+    //   for (unsigned int ligne = 0; ligne < adresses.size(); ligne++)
+    //     {
+    //       f << "   " << ligne << " | ";
+    //       for (unsigned int colonne = 0; colonne < adresses.size(); colonne++)
+    // {
+    //   int value = (distances.at(ligne)).at(colonne);
+    //   std::string spacesBefore = "";
+    //   if (value < 10)
+    //     spacesBefore = "   ";
+    //   else if (value < 100)
+    //     spacesBefore = "  ";
+    //   else if (value < 1000)
+    //     spacesBefore = " ";
+    //   else
+    //     spacesBefore = "";
+    //   f << spacesBefore << value << " | ";
+    // }
+    //       f << std::endl << "  --------------------------------" << std::endl;
+    //     }
+    //   f.close();
 }
 
 // Fonction pour la recuperation de la matrice de distances, et l'exploitation
@@ -368,7 +372,7 @@ void get_and_process_matrix(int id, int fd){
   int portnum;
   struct sockaddr_in sin;
   struct hostent *shes2;
-
+    
  /* Preparation of the connection */
   if(debug) printf("gethostbyname(%s)=",host);
   shes2 = gethostbyname(host);
@@ -436,13 +440,16 @@ void get_and_process_matrix(int id, int fd){
       }
       close(ficmat);
       // traitement 
-      process_matrix("res.txt");
+      process_matrix("res.html", id);
       // envoi au client
       printf(" >>> Envoi final de la reponse au client...\n\n");
-      if ((ficres=open("res.txt", O_RDONLY)) != -1) {
-	while ( (n=read(ficres, tampon, 512)) != 0) {
-	  write(fd, tampon, n);
-	}
+      if ((ficres=open("res.html", O_RDONLY)) != -1) {
+          
+          std::string s = "HTTP/1.0 200 OK\nContent-Type: text/html\n\n";
+          write(fd, s.c_str(), s.size());
+	      while ( (n=read(ficres, tampon, 512)) != 0) {
+	          write(fd, tampon, n);
+	      }
 	close(ficres);
       }
       else
