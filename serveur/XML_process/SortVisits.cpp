@@ -24,10 +24,11 @@ SortVisits::~SortVisits() {
 
 
 /// Faire le job...
-void SortVisits::modifyFile(char * filename, std::vector<std::string> adresses) {
+void SortVisits::modifyFile(char * filename, std::vector<std::string> * adresses) {
     std::cout << " Modifying xml file..." << std::endl;
 }
 
+//See http://libxmlplusplus.sourceforge.net/docs/manual/html/ar01s02.html
 void SortVisits::saveXHTMLFile(char * inputXMLFile, char * outputXHTMLFile, int id)
 {
     FILE *outFile = NULL;

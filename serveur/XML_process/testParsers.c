@@ -2,14 +2,14 @@
 
 #include "FromXMLToGoogleMapHTTPRequest.h"
 #include "FromGoogleMapXMLToDistanceTable.h"
-#include "SortVisits.h"
+//#include "SortVisits.h"
 
 
 int main(int argc, char *argv[]) {
     if (argc < 3) {
         std::cout << "Veuillez entrer le nom du fichier à analyser en paramètre de la commande : testParsers filename.xml id" << std::endl;
         std::cout << "Exemple: " << std::endl;
-        std::cout << "> ./testParsers data/cabinet_output.xml 001" << std::endl << std::endl;
+        std::cout << "> ./testParsers ../data/cabinetInfirmier.xml 001" << std::endl << std::endl;
         return 1;
     }
     char * filename = argv[1];
@@ -18,9 +18,9 @@ int main(int argc, char *argv[]) {
     
     FromXMLToGoogleMapHTTPRequest dataBaseParser(id);
     FromGoogleMapXMLToDistanceTable googleMapParser;
-    SortVisits sorter;
-    std::vector<std::string> adresses;
-    std::vector< std::vector<int> > distances;
+//    SortVisits sorter;
+    std::vector<std::string> * adresses;
+    std::vector< std::vector<int> > * distances;
     
     
     int option = -1;
@@ -55,22 +55,23 @@ int main(int argc, char *argv[]) {
                 break;
                 
             case 2: // créer un tableau c++ à partir du fichier XML renvoyé par GoogleMap
-                googleMapParser.parseDocument(filename);
+                googleMapParser.parseDocument("../data/reponseGoogle.xml");
                 std::cout << std::endl;
                 std::cout << std::endl;
                 adresses = googleMapParser.getAdresses();
                 distances = googleMapParser.getDistances();
                 
                 // écrire la liste des adresses:
-                for (unsigned int i = 0; i < adresses.size(); i++)
+                for (unsigned int i = 0; i < adresses->size(); i++)
                 {
-                    std::cout << "| " << i << " | " << adresses.at(i) << " | " << std::endl;
+                    std::cout << "| " << i << " | " << adresses->at(i) << " | " << std::endl;
                 }
                 std::cout << std::endl;
                 std::cout << std::endl;
+                
                 // écrire le tableau des distances avec les index
                 std::cout << "     | ";
-                for(unsigned int c = 0; c < adresses.size(); c++) {
+                for(unsigned int c = 0; c < adresses->size(); c++) {
                     std::string spacesBefore = "";
                     if (c < 10)
                         spacesBefore = "   ";
@@ -85,12 +86,12 @@ int main(int argc, char *argv[]) {
                 }
                 std::cout << std::endl << "  --------------------------------" << std::endl;
                 
-                for (unsigned int ligne = 0; ligne < adresses.size(); ligne++)
+                for (unsigned int ligne = 0; ligne < adresses->size(); ligne++)
                 {
                     std::cout << "   " << ligne << " | ";
-                    for (unsigned int colonne = 0; colonne < adresses.size(); colonne++)
+                    for (unsigned int colonne = 0; colonne < adresses->size(); colonne++)
                     {
-                        int value = (distances.at(ligne)).at(colonne);
+                        int value = (distances->at(ligne)).at(colonne);
                         std::string spacesBefore = "";
                         if (value < 10)
                             spacesBefore = "   ";
@@ -105,14 +106,15 @@ int main(int argc, char *argv[]) {
                     }
                     std::cout << std::endl << "  --------------------------------" << std::endl;
                 }
+                
                 break;
                 
                 case 3: // Modifier la base de données XML donnée avec une liste d'adresses ordonnées pour une infirmière
-                    sorter.modifyFile(filename, adresses);
+//                    sorter.modifyFile(filename, adresses);
                     break;
                     
                 case 4: // Display the HTML file
-                    sorter.saveXHTMLFile(filename, "data/test.html", idInt);
+//                    sorter.saveXHTMLFile(filename, "../data/test.html", idInt);
                     break;
                     
             default:
