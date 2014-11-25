@@ -1,11 +1,21 @@
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
+const AMIVAL = 3.15;
+const AISVAL = 2.65;
+const DIVAL = 10.0;
+
+var totalFacture = 0.0;
+
 function afficherFacture(prenom, nom, actes)
 {
-    var text = "";
-    
+    totalFacture = 0.0;
+    var text = "<html>\n";
+    text += 
+    "    <head>\n\
+            <title>Facture</title>\n\
+            <link rel='stylesheet' type='text/css' href='css/mystyle.css'/>\n\
+         </head>\n\
+         <body>\n";
+                 
     text += "<table>";
     
     text += "<tr>";
@@ -13,7 +23,7 @@ function afficherFacture(prenom, nom, actes)
     text += "<td> </td>";
     text += "</tr>";
     
-    
+ 
     // Trouver l'adresse du patient
     var xmlDoc = loadXMLDoc("data/cabinetInfirmier.xml");
     var patients = xmlDoc.getElementsByTagName("patient");
@@ -40,6 +50,7 @@ function afficherFacture(prenom, nom, actes)
         text += "<td> Numéro de sécurité sociale: " + nSS + "</td>";
         text += "</tr>";
     }        
+    
     text += "</table>"
     
     // Actes
@@ -50,14 +61,19 @@ function afficherFacture(prenom, nom, actes)
     text += "</tr>";
     
     var acteIds = actes.split(" ");
+    
     for (var j = 0; j < acteIds.length; j++) {
         text += "<tr>"
         var acteId = acteIds[j];
         text += acteTable(acteId);
         text +="</tr>";
     }
+    text += "<tr><td colspan='4'>Total</td><td>" + totalFacture + "</td></tr>\n"
+    
     text +="</table>";
-
+    text += 
+    "    </body>\n\
+    </html>\n"
     
     return text;
 }
@@ -88,15 +104,40 @@ function acteTable(acteId)
         var cle  = acte.getAttribute("clé");
         var coef = acte.getAttribute("coef");
         var typeId = acte.getAttribute("type");
-        var intitule = acte.childNodes[0].nodeValue;
+        var type = "";
+        // Récupérer la chaîne de caractère du type
+        var types = xmlDoc.getElementsByTagName("type");
+        var t = 0;
+        while ((t < types.length) && (types[t].getAttribute("id") != typeId)) {
+            t++;
+        }
+        if (t < types.length) {
+          type = types[t].childNodes[0].nodeValue;
+        }
         
-        str += "<td>" + typeId + "</td>";
+        var intitule = acte.childNodes[0].nodeValue;
+        // Tarif = (lettre-clé)xcoefficient        
+        var tarif = parseFloat(coef);
+        
+        if (cle == "AMI") {
+            tarif *= AMIVAL;
+        }
+        else if (cle == "AIS") {
+            tarif *= AISVAL;
+        }
+        else if (cle == "DI") {
+            tarif *= DIVAL;
+        }
+          
+        str += "<td>" + type + "</td>";
         str += "<td>" + cle + "</td>";
         str += "<td>" + intitule + "</td>";
         str += "<td>" + coef + "</td>";
-        str += "<td> 0.0 </td>";
+        str += "<td>" + tarif + "</td>";
+        totalFacture += tarif;
     }
   
   
     return str;
 }
+

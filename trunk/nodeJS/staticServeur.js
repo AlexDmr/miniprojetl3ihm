@@ -211,6 +211,7 @@ var RRServer = {
 							}
 				);
 		 this.app.post('/INFIRMIERE', function(req, res) {
+             /* CELINE
 							 var node = self.doc.getElementById(req.body.id);
 							 if(node) {
 								 res.writeHead	(200, {'Content-type': 'text/xml; charset=utf-8'} );
@@ -218,6 +219,9 @@ var RRServer = {
 								} else {res.writeHead	(400, {'Content-type': 'text/plain; charset=utf-8'} );
 										res.write( "Unknown id " + req.body.id);
 									   }
+             */
+             res.writeHead(0);
+             res.write(self.xmlSerializer.serializeToString(self.doc));
 							 res.end();
 							}
 				);

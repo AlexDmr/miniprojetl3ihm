@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DistanceMatrixResponse>
  <status>OK</status>
- <origin_address>46 Avenue Félix Viallet, IUT 2, 38031 Grenoble, France</origin_address>
+ <origin_address>Université Joseph Fourier, UFR IM²AG, 60 Rue de la Chimie, 38400 Saint-Martin-d'Hères, France</origin_address>
+ <origin_address>IUT 2, 46 Avenue Félix Viallet, 38031 Grenoble, France</origin_address>
  <origin_address>Rond-point de la Croix de Vie, 38700 La Tronche, France</origin_address>
  <origin_address>Rue Casimir Brenier, 38000 Grenoble, France</origin_address>
  <origin_address>25 Rue des Martyrs, 38000 Grenoble, France</origin_address>
- <destination_address>46 Avenue Félix Viallet, IUT 2, 38031 Grenoble, France</destination_address>
+ <destination_address>Université Stendhal - Grenoble 3, Université Joseph Fourier, UFR IM²AG, 60 Rue de la Chimie, 38400 Saint-Martin-d'Hères, France</destination_address>
+ <destination_address>IUT 2, 46 Avenue Félix Viallet, 38031 Grenoble, France</destination_address>
  <destination_address>Rond-point de la Croix de Vie, 38700 La Tronche, France</destination_address>
  <destination_address>Rue Casimir Brenier, 38000 Grenoble, France</destination_address>
  <destination_address>25 Rue des Martyrs, 38000 Grenoble, France</destination_address>
@@ -24,33 +26,101 @@
   <element>
    <status>OK</status>
    <duration>
-    <value>481</value>
-    <text>8 mins</text>
+    <value>933</value>
+    <text>16 mins</text>
    </duration>
    <distance>
-    <value>3430</value>
-    <text>3.4 km</text>
+    <value>5889</value>
+    <text>5.9 km</text>
    </distance>
   </element>
   <element>
    <status>OK</status>
    <duration>
-    <value>48</value>
+    <value>571</value>
+    <text>10 mins</text>
+   </duration>
+   <distance>
+    <value>7473</value>
+    <text>7.5 km</text>
+   </distance>
+  </element>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>983</value>
+    <text>16 mins</text>
+   </duration>
+   <distance>
+    <value>6135</value>
+    <text>6.1 km</text>
+   </distance>
+  </element>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>1015</value>
+    <text>17 mins</text>
+   </duration>
+   <distance>
+    <value>17979</value>
+    <text>18.0 km</text>
+   </distance>
+  </element>
+ </row>
+ <row>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>869</value>
+    <text>14 mins</text>
+   </duration>
+   <distance>
+    <value>5561</value>
+    <text>5.6 km</text>
+   </distance>
+  </element>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>0</value>
     <text>1 min</text>
    </duration>
    <distance>
-    <value>224</value>
+    <value>0</value>
+    <text>1 m</text>
+   </distance>
+  </element>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>463</value>
+    <text>8 mins</text>
+   </duration>
+   <distance>
+    <value>3067</value>
+    <text>3.1 km</text>
+   </distance>
+  </element>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>50</value>
+    <text>1 min</text>
+   </duration>
+   <distance>
+    <value>246</value>
     <text>0.2 km</text>
    </distance>
   </element>
   <element>
    <status>OK</status>
    <duration>
-    <value>473</value>
+    <value>450</value>
     <text>8 mins</text>
    </duration>
    <distance>
-    <value>3000</value>
+    <value>2998</value>
     <text>3.0 km</text>
    </distance>
   </element>
@@ -59,11 +129,22 @@
   <element>
    <status>OK</status>
    <duration>
-    <value>534</value>
+    <value>547</value>
     <text>9 mins</text>
    </duration>
    <distance>
-    <value>3345</value>
+    <value>6692</value>
+    <text>6.7 km</text>
+   </distance>
+  </element>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>512</value>
+    <text>9 mins</text>
+   </duration>
+   <distance>
+    <value>3340</value>
     <text>3.3 km</text>
    </distance>
   </element>
@@ -81,22 +162,22 @@
   <element>
    <status>OK</status>
    <duration>
-    <value>582</value>
-    <text>10 mins</text>
+    <value>562</value>
+    <text>9 mins</text>
    </duration>
    <distance>
-    <value>3569</value>
+    <value>3586</value>
     <text>3.6 km</text>
    </distance>
   </element>
   <element>
    <status>OK</status>
    <duration>
-    <value>842</value>
+    <value>815</value>
     <text>14 mins</text>
    </duration>
    <distance>
-    <value>5625</value>
+    <value>5620</value>
     <text>5.6 km</text>
    </distance>
   </element>
@@ -105,23 +186,34 @@
   <element>
    <status>OK</status>
    <duration>
-    <value>64</value>
+    <value>848</value>
+    <text>14 mins</text>
+   </duration>
+   <distance>
+    <value>5446</value>
+    <text>5.4 km</text>
+   </distance>
+  </element>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>53</value>
     <text>1 min</text>
    </duration>
    <distance>
-    <value>310</value>
+    <value>289</value>
     <text>0.3 km</text>
    </distance>
   </element>
   <element>
    <status>OK</status>
    <duration>
-    <value>470</value>
-    <text>8 mins</text>
+    <value>443</value>
+    <text>7 mins</text>
    </duration>
    <distance>
-    <value>3337</value>
-    <text>3.3 km</text>
+    <value>2952</value>
+    <text>3.0 km</text>
    </distance>
   </element>
   <element>
@@ -138,11 +230,11 @@
   <element>
    <status>OK</status>
    <duration>
-    <value>513</value>
-    <text>9 mins</text>
+    <value>453</value>
+    <text>8 mins</text>
    </duration>
    <distance>
-    <value>2907</value>
+    <value>2883</value>
     <text>2.9 km</text>
    </distance>
   </element>
@@ -151,7 +243,18 @@
   <element>
    <status>OK</status>
    <duration>
-    <value>306</value>
+    <value>1096</value>
+    <text>18 mins</text>
+   </duration>
+   <distance>
+    <value>7699</value>
+    <text>7.7 km</text>
+   </distance>
+  </element>
+  <element>
+   <status>OK</status>
+   <duration>
+    <value>303</value>
     <text>5 mins</text>
    </duration>
    <distance>
@@ -162,22 +265,22 @@
   <element>
    <status>OK</status>
    <duration>
-    <value>703</value>
+    <value>690</value>
     <text>12 mins</text>
    </duration>
    <distance>
-    <value>5569</value>
-    <text>5.6 km</text>
+    <value>5206</value>
+    <text>5.2 km</text>
    </distance>
   </element>
   <element>
    <status>OK</status>
    <duration>
-    <value>290</value>
+    <value>301</value>
     <text>5 mins</text>
    </duration>
    <distance>
-    <value>2326</value>
+    <value>2347</value>
     <text>2.3 km</text>
    </distance>
   </element>
