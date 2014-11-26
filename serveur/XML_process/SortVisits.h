@@ -14,7 +14,7 @@ public:
     ~SortVisits();
     
     /// Faire le job...
-    void modifyFile(char * filename, std::vector<std::string> adresses);
+    void modifyFile(char * filename, std::vector<std::string> * adresses);
     
     /// Faire du xslt
     void saveXHTMLFile(char * inputXMLFile, char * outputXHTMLFile, int id);
