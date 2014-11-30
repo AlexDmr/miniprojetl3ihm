@@ -2,7 +2,7 @@
 
 #include "FromXMLToGoogleMapHTTPRequest.h"
 #include "FromGoogleMapXMLToDistanceTable.h"
-//#include "SortVisits.h"
+#include "SortVisits.h"
 
 
 int main(int argc, char *argv[]) {
@@ -18,9 +18,12 @@ int main(int argc, char *argv[]) {
     
     FromXMLToGoogleMapHTTPRequest dataBaseParser(id);
     FromGoogleMapXMLToDistanceTable googleMapParser;
-//    SortVisits sorter;
+    SortVisits sorter;
     std::vector<std::string> * adresses;
     std::vector< std::vector<int> > * distances;
+    std::string inputStd(filename);
+    std::string tmpFileName = inputStd.substr(0, inputStd.find_last_of("."));
+    tmpFileName += "-sorted.xml";
     
     
     int option = -1;
@@ -110,7 +113,25 @@ int main(int argc, char *argv[]) {
                 break;
                 
                 case 3: // Modifier la base de données XML donnée avec une liste d'adresses ordonnées pour une infirmière
-//                    sorter.modifyFile(filename, adresses);
+                googleMapParser.parseDocument("../data/reponseGoogle.xml");
+                std::cout << std::endl;
+                std::cout << std::endl;
+                adresses = googleMapParser.getAdresses();
+               
+                // On échange 2 adresses pour le test...
+                if (adresses->size() > 2) {
+                    std::string tmp = adresses->at(2);
+                    adresses->at(2) = adresses->at(1);
+                    adresses->at(1) = tmp;
+                }
+                // écrire la liste des adresses:
+                for (unsigned int i = 0; i < adresses->size(); i++)
+                {
+                    std::cout << "| " << i << " | " << adresses->at(i) << " | " << std::endl;
+                }
+                std::cout << std::endl;
+                               
+                    sorter.modifyFile(filename, adresses, tmpFileName.c_str());
                     break;
                     
                 case 4: // Display the HTML file

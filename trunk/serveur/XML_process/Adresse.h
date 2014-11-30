@@ -15,6 +15,6 @@ public:
     void setRue(std::string rue);
     void setVille(std::string ville);
     void setCodePostal(std::string codePostal);
-    
     std::string getGoogleAdresse();
+    std::string getGoogleAnswerAdress();    
 };
