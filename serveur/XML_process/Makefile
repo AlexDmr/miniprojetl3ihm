@@ -11,6 +11,9 @@ testParsers: testParsers.o LwSaxParser.o FromXMLToGoogleMapHTTPRequest.o FromGoo
 testParsers.o : FromXMLToGoogleMapHTTPRequest.o LwSaxParser.o Adresse.o testParsers.c
 	$(CC) -c $(CFLAGS) $(INCLUDEFLAGS) testParsers.c -o testParsers.o
 
+SortVisits.o : FromGoogleMapXMLToDistanceTable.o SortVisits.h SortVisits.cpp 
+	$(CC) -c $(CFLAGS) $(INCLUDEFLAGS) SortVisits.cpp -o SortVisits.o
+
 LwSaxParser.o : LwSaxParser.h LwSaxParser.cpp
 	$(CC) -c $(CFLAGS) $(INCLUDEFLAGS) LwSaxParser.cpp -o LwSaxParser.o
 
@@ -20,10 +23,7 @@ FromXMLToGoogleMapHTTPRequest.o : FromXMLToGoogleMapHTTPRequest.h FromXMLToGoogl
 FromGoogleMapXMLToDistanceTable.o : FromGoogleMapXMLToDistanceTable.h FromGoogleMapXMLToDistanceTable.cpp LwSaxParser.h LwSaxParser.cpp Adresse.h Adresse.cpp
 	$(CC) -c $(CFLAGS) $(INCLUDEFLAGS) FromGoogleMapXMLToDistanceTable.cpp -o FromGoogleMapXMLToDistanceTable.o
 
-SortVisits.o : SortVisits.h SortVisits.cpp 
-	$(CC) -c $(CFLAGS) $(INCLUDEFLAGS) SortVisits.cpp -o SortVisits.o
-
-Adresse.o : Adresse.h Adresse.cpp
+dresse.o : Adresse.h Adresse.cpp
 	$(CC) -c $(CFLAGS) $(INCLUDEFLAGS) Adresse.cpp -o Adresse.o
 	
 clean:

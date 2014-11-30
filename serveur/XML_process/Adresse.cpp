@@ -32,3 +32,15 @@ std::string Adresse::getGoogleAdresse() {
     
     return resultat;
 }
+
+std::string Adresse::getGoogleAnswerAdress() {
+    std::string adresse = "";
+    if (! numero.empty()) {
+        adresse += numero + " ";
+    }
+    adresse += rue + ", ";
+    adresse += codePostal + " ";
+    adresse += ville;
+    
+    return adresse;
+}
