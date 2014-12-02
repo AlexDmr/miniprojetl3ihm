@@ -20,7 +20,7 @@ public:
     ~SortVisits();
     
     /// Méthode qui fait tout
-    void processDistanceMatrix(char * inputFileName, char * outputFileName, int id);
+    void processDistanceMatrix(char * inputFileName, char * outputFileName, int id, char * googleAnswer);
     
     /// Faire le job...
     void modifyFile(const char * inputFilename, std::vector<std::string> * adresses, const char * outputFilename);

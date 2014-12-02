@@ -135,7 +135,7 @@ int main(int argc, char *argv[]) {
                     break;
                     
                 case 4: // Display the HTML file
-//                    sorter.saveXHTMLFile(filename, "../data/test.html", idInt);
+                    sorter.saveXHTMLFile(filename, "../data/test.html", idInt);
                     break;
                     
             default:
