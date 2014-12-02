@@ -375,16 +375,17 @@ void set_header_request_distmatrix(int id, char req[1024]){
 // un fichier, qu'on va faire passer au client) 
 void process_matrix (char *nomficres, int id){ 
   SortVisits sorter;    
-  FromGoogleMapXMLToDistanceTable googleMapParser;
-  std::vector<std::string> * adresses;
-  std::vector< std::vector<int> > * distances;
-  std::ofstream f; 
-
-  f.open(nomficres);
-  adresses = googleMapParser.getAdresses();
-  distances = googleMapParser.getDistances();
-  sorter.modifyFile("char * filename", adresses);
-  sorter.saveXHTMLFile("data/cabinetInfirmier.xml", nomficres, id);
+  sorter.processDistanceMatrix("TMP.xml", nomficres, id, "TMP2.xml");
+  // FromGoogleMapXMLToDistanceTable googleMapParser;
+//   std::vector<std::string> * adresses;
+//   std::vector< std::vector<int> > * distances;
+//   std::ofstream f;
+//
+//   f.open(nomficres);
+//   adresses = googleMapParser.getAdresses();
+//   distances = googleMapParser.getDistances();
+//   sorter.modifyFile("char * filename", adresses);
+//   sorter.saveXHTMLFile("data/cabinetInfirmier.xml", nomficres, id);
     //   for (unsigned int i = 0; i < adresses.size(); i++)
     //     {
     //       f << "| " << i << " | " << adresses.at(i) << " | " << std::endl;

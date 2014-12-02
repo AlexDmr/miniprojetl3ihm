@@ -25,11 +25,12 @@ SortVisits::~SortVisits() {
     
 }
 
-void SortVisits::processDistanceMatrix(char * inputFileName, char * outputFileName, int id) {
+void SortVisits::processDistanceMatrix(char * inputFileName, char * outputFileName, int id, char * googleAnswer) {
     FromGoogleMapXMLToDistanceTable googleMapParser;
     std::vector<std::string> * adresses;
     std::vector< std::vector<int> > * distances;
 
+    googleMapParser.parseDocument(googleAnswer);
     adresses = googleMapParser.getAdresses();
     distances = googleMapParser.getDistances();
     
