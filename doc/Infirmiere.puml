@@ -1,0 +1,33 @@
+@startuml
+    title Diagramme de Séquences de la Connection de l Infirmière
+
+    actor Infirmiere
+    participant "Navigateur" as nav 
+    participant "Proxy L3 MIAGE" as proxy 
+    participant "Serveur NodeJS" as njs
+    participant "XML Parsers Lib" as xml 
+    participant "Optimisation Lib" as ro 
+    participant "GoogleMap API" as google
+
+    Infirmiere -> nav: connect() 
+    
+    nav -> proxy: "[POST /INFIRMIERE HTTP/1.0]"
+    proxy -> njs: httpGet(char *nomFichierDataBase)
+    njs -> proxy: écrit la database dans nomFichierDataBase (xml)
+    proxy -> xml: parser.getGoogleHttpRequest(char * nomFichierDataBase, int noInfirmiere): char* 
+    
+    note right: construction de\nla requête HTTP\nà partir du fichier XMLet de \nl'identifiant de l'infirmière
+    xml -> proxy: char * requeteHttpPourGoogle
+
+    proxy -> google: getDistanceMatrix(char * nomFichierMatrice): void
+    note right: récupération de\nla matrice de distances
+    google -> proxy: écrit la matrice de distances dans nomFichierMatrice (xml)
+
+    proxy -> xml: sorter.processDistanceMatrix(char * nomFichierDataBase, char * nomFichierMatrice,\n int noInfirmiere, char* nomFichierRes): void
+    xml -> ro: travelingSalesmanPerson(\nconst vector<vector<int>> &graph): vector<int>
+    note right: ré-arrangement de\nla liste des patients
+    ro -> xml: vector<int> listeSommetsTries
+    xml -> proxy: Ecrit le parcours de l'infirmière dans  nomFichierRes (html)
+    note right: sauvegarde d'un XHTM
+    proxy -> Infirmiere: transmission de nomFichierRes (html)
+@enduml
