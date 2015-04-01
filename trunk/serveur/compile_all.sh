@@ -1,13 +1,17 @@
 #!/bin/sh
 
-echo "--------- Compilation proxy -----------"
+echo "------------- Compilation API XML -------------"
 cd XML_process ; make
-cd .. ; make proxy-L3 
+success=$?
 echo
-echo "------- Compilation simulateur de serveur HTTP ---------"
-gcc -Wall -o simu_serveur_http simu_serveur_http.c
+[ $success -eq 0 ] && (echo "------------ Compilation proxy --------------"; cd .. ; make proxy-metier)
+success=$?
 echo
-echo "-------- Compilation simulateur de client infirmiere --------"
-gcc -Wall -o simu_client_req6 simu_client_req6.c
-echo "FINI"
+if [ $success -eq 0 ]
+then
+echo "COMPILATION FINIE"
+else 
+echo "ERREUR(S)"
+fi
+
 

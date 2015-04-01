@@ -1,41 +1,78 @@
 #include <iostream>
-
 #include <curl.h>
-#include "Adresse.h"
+
+#include "Address.h"
+
 #include "FromXMLToGoogleMapHTTPRequest.h"
 
 // Constructeur
-FromXMLToGoogleMapHTTPRequest::FromXMLToGoogleMapHTTPRequest(std::string id) : LwSaxParser()
+FromXMLToGoogleMapHTTPRequest::FromXMLToGoogleMapHTTPRequest() : LwSaxParser()
 {
-    this->id = "00" + id;
-    
+    // On initialise les attributs...
+    isCabinet = false;
+    nurseId = "";
+    currentState = OTHER;
+    addressList = "";
     request = "";
-    listeAdresses = "";
-    state = OTHER;
+    currentAddress = NULL;
 }
 
 FromXMLToGoogleMapHTTPRequest::~FromXMLToGoogleMapHTTPRequest() {
+    // On libère l'adresse courante
+    if (currentAddress != NULL) {
+        delete currentAddress;
+    }    
+}
+
+
+char * FromXMLToGoogleMapHTTPRequest::getGoogleHttpRequest(char * dataBaseFileName, int nurseNumber) {
+    char * result;
+    // Convertir l'entier nurseNumber en std::string pour pouvoir le stocker dans l'attribut id
+    // Possible en C -> lire l'API doc de la méthode itoa
+    // Plus simple en C++ en utilisant la STL
+    std::ostringstream nbStr;
+    if (nurseNumber < 100) {
+        nbStr << "0";
+    }
+    if (nurseNumber < 10) {
+        nbStr << "0";
+    }
+    nbStr << nurseNumber;
+    nurseId = nbStr.str();
+    std::cout << "Nurse Id: " << nurseId.c_str() << std::endl;
+    
+    // Parser le docuemnt
+    parseDocument(dataBaseFileName);
+    
+    // Convertir la requête au format std::string en char *
+    //    result = request.c_str(); -> ne fonctionne pas car request.c_str() renvoie quelque chose de const
+    result = new char[request.length() + 1];
+    strcpy(result, request.c_str());
+        
+    // Renvoyer le résultat    
+    return result;
     
 }
 
-std::string FromXMLToGoogleMapHTTPRequest::getGoogleMapHttpRequest() {
-    return request;
-}
-
-std::string FromXMLToGoogleMapHTTPRequest::getGoogleMapHttpRequest_V2() {
-    return "origins=" + std::string(curl_easy_escape(NULL,"Grenoble+38031+46+avenue+Félix+Viallet|La Tronche+38700+Rond-Point+de+la+Croix+de+Vie|Grenoble+38000+rue+Casimir+Brenier|Grenoble+38042+25+rue+des+Martyrs",0)) + "&destinations=" + std::string(curl_easy_escape(NULL,"Grenoble+38031+46+avenue+Félix+Viallet|La Tronche+38700+Rond-Point+de+la+Croix+de+Vie|Grenoble+38000+rue+Casimir+Brenier|Grenoble+38042+25+rue+des+Martyrs",0));
-}
-
-/// Ce qui se passe lorsqu'on commence le parcours d'un docuemnt
+// Ce qui se passe lorsqu'on commence le parcours d'un docuemnt
 void FromXMLToGoogleMapHTTPRequest::on_start_document() {
+    // On ré-initialise les attributs
+    // Imaginons que l'on a déjà parsé un fichier et que l'on souhaite en parser un deuxième...
+    // Il faut alors remettre à jour les attributs du parseur !
+    // Attention, ne pas toucher à nurseId, qui a été renseigné dans en attribut de la méthode getGoogleHttpRequest !
+    isCabinet = false;
+    addressList = "";
     request = "";
-    listeAdresses = "";    
-    state = START;
-    adresseCourante = NULL;
+    currentAddress = NULL;
+    // On se met dans l'état START pour pouvoir démarrer...
+    currentState = START;
 }
-/// Ce qui se passe lorsque l'on termine le parcours du document
+
+// Ce qui se passe lorsque l'on termine le parcours du document
 void FromXMLToGoogleMapHTTPRequest::on_end_document() {
-    request = "origins=" + std::string(curl_easy_escape(NULL,listeAdresses.c_str(),0)) + "&destinations=" + std::string(curl_easy_escape(NULL,listeAdresses.c_str(),0));
+    // Une fois que l'on a terminé le parsing du document, on converti la liste d'adresse en requête Google
+    // et on la stocke dans l'attribut request de type std::string (plus facile à manipuler que char *).
+     request = "origins=" + std::string(curl_easy_escape(NULL,addressList.c_str(),0)) + "&destinations=" + std::string(curl_easy_escape(NULL,addressList.c_str(),0));
 }
 
 /** 
@@ -45,55 +82,57 @@ void FromXMLToGoogleMapHTTPRequest::on_end_document() {
  */
 void FromXMLToGoogleMapHTTPRequest::on_start_element(const Glib::ustring& name, const AttributeList& properties) {
     // Lorsque l'on arrive sur un nouveau patient ou à l'adrsse du cabinet, on reset l'adresse...
-    switch(state) {
+    switch(currentState) {
     case START:
         if (name == "patient") {
-            state = PATIENT;
+            currentState = PATIENT;
         }
         if (name == "adresse") {
-            state = ADRESSE;
-            adresseCabinet = true;
-            adresseCourante = new Adresse();
+            currentState = ADRESSE;
+            isCabinet = true;
+            currentAddress = new Address();
         }
         break;
     case PATIENT:
         if (name == "adresse") {
-            state = ADRESSE;
-            adresseCabinet = false;
-            adresseCourante = new Adresse();
+            currentState = ADRESSE;
+            isCabinet = false;
+            currentAddress = new Address();
         }
         if (name == "visite") {
-            state = VISITE;
+            currentState = VISITE;
             std::string itervenant = findAttribute(properties, "intervenant");
             // Si l'intervenant est le bon
-            if ((itervenant != "") && (itervenant == id)) {
-                //std::cout << "intervenant: " << itervenant << std::endl;
+            if ((itervenant != "") && (itervenant == nurseId)) {
                 // On ajoute l'adresse à la liste d'adresse
-                listeAdresses += "|" + adresseCourante->getGoogleAdresse();
+                addressList += "|" + currentAddress->getGoogleAdresse();
             }
-            // dans tous les cas, détruire l'adresse
-            delete adresseCourante;
-            adresseCourante = NULL;
+            // Il n'y a pas de Garbage Collector en C++...
+            // C'est à nous de détruire les instances avant qu'elles soient déréférencées !
+            if (currentAddress != NULL) {
+                delete currentAddress;
+                currentAddress = NULL;                
+            }
         }
         break;
     case ADRESSE:
         if (name == "étage") {
-            state = ETAGE;
+            currentState = ETAGE;
         }
         if (name == "numéro") {
-            state = NUMERO;
+            currentState = NUMERO;
         }
         if (name == "rue") {
-            state = RUE;
+            currentState = RUE;
         }
         if (name == "ville") {
-            state = VILLE;
+            currentState = VILLE;
         }
         if (name == "numéro") {
-            state = NUMERO;
+            currentState = NUMERO;
         }
         if (name == "codePostal") {
-            state = CODEPOSTAL;
+            currentState = CODEPOSTAL;
         }
         break;
     default:
@@ -107,26 +146,26 @@ void FromXMLToGoogleMapHTTPRequest::on_start_element(const Glib::ustring& name, 
  *
  */
 void FromXMLToGoogleMapHTTPRequest::on_end_element(const Glib::ustring& name) {
-    switch(state) {
+    switch(currentState) {
     case START:
     break;
     case PATIENT:
-    // Attention ! Il y a plusieurs éléments dans PATIENT, il faut vérifier que le no
-    // est bien le nom pour sortir de l'état patient !
+    // Attention ! Il y a plusieurs éléments dans PATIENT, il faut vérifier que le
+    // nom de l'élément duquel on sort est bien patient !
     if (name == "patient") {
-        state = START;
+        currentState = START;
     }
     break;
     case ADRESSE:
-    if (adresseCabinet) {
+    if (isCabinet) {
         // Si l'on sort de l'adresse du cabinet, on l'ajoute à la liste d'adresses
-        listeAdresses += adresseCourante->getGoogleAdresse();
-        delete adresseCourante;
-        adresseCourante = NULL;
-        state = START;
+        addressList += currentAddress->getGoogleAdresse();
+        delete currentAddress;
+        currentAddress = NULL;
+        currentState = START;
     }
     else {
-        state = PATIENT;
+        currentState = PATIENT;
     }
     break;
     case ETAGE:
@@ -134,78 +173,50 @@ void FromXMLToGoogleMapHTTPRequest::on_end_element(const Glib::ustring& name) {
     case RUE:
     case VILLE:
     case CODEPOSTAL:
-    state = ADRESSE;
+    currentState = ADRESSE;
     break;
     case VISITE:
-    state = PATIENT;
+    currentState = PATIENT;
     break;
     default:
     break;
     }
 }
 
-/** 
+/* 
  * Ce qui se passe lorsque l'on rencontre une chaîne de caractères
  * @parameter characters la liste de caractères en question
  */
 void FromXMLToGoogleMapHTTPRequest::on_characters(const Glib::ustring& characters) {
-    switch (state) {
+    switch (currentState) {
         // Cas où il faut noter l'adresse courante (on verra plus tard si on la sauvegarde dans la liste d'adresses)
         case NUMERO:
-        if (adresseCourante != NULL) {
-            adresseCourante->setNumero(characters);
+        if (currentAddress != NULL) {
+            currentAddress->setNumero(characters);
         }
         break;
         case RUE:
-        if (adresseCourante != NULL) {
-            adresseCourante->setRue(characters);
+        if (currentAddress != NULL) {
+            currentAddress->setRue(characters);
         }
         break;
         case VILLE:
-        if (adresseCourante != NULL) {
-            adresseCourante->setVille(characters);
+        if (currentAddress != NULL) {
+            currentAddress->setVille(characters);
         }
         break;
         case CODEPOSTAL:
-        if (adresseCourante != NULL) {
-            adresseCourante->setCodePostal(characters);
+        if (currentAddress != NULL) {
+            currentAddress->setCodePostal(characters);
         }
         break;                
     }
-    // switch (state) {
-    //     case START:
-    //     std::cout << "START ";
-    //     break;
-    //     case PATIENT:
-    //     std::cout << "PATIENT ";
-    //     break;
-    //     case ADRESSE:
-    //     std::cout << "ADRESSE ";
-    //     break;
-    //     case ETAGE:
-    //     std::cout << "ETAGE ";
-    //     break;
-    //     case NUMERO:
-    //     std::cout << "NUMERO ";
-    //     break;
-    //     case RUE:
-    //     std::cout << "RUE ";
-    //     break;
-    //     case VILLE:
-    //     std::cout << "VILLE ";
-    //     break;
-    //     case CODEPOSTAL:
-    //     std::cout << "CODEPOSTAL ";
-    //     break;
-    //     case VISITE:
-    //     std::cout << "VISITE ";
-    //     break;
-    //     case OTHER:
-    //     std::cout << "OTHER ";
-    //     break;
-    // }
 }
 
+/*
+ * Méthode d'aide qui permet de trouver un attribut qui a un certain nom dans une liste d'attribut.
+ * Cette méthode existe de base dans l'API Sax de Java, mais pas ici, c'est pourquoi elle est donnée.
+ */
 std::string FromXMLToGoogleMapHTTPRequest::findAttribute(const AttributeList& attributeList, std::string attributeName) {
     std::string resultat = "";
     xmlpp::SaxParser::AttributeList::const_iterator iter = attributeList.begin();

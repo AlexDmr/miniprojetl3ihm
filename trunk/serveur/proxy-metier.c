@@ -71,7 +71,14 @@ int s;
 struct sockaddr_in sc_in;
 FILE *lfp = NULL;
 char **info;
-
+// Par defaut, le serveur NodeJS est sur la meme machine :
+char *nomServeurNodeJS = "localhost";
+// Fichier contenant la base venue du serveur NodeJS
+char *nomFichierDataBase = "FichierDataBase.xml";
+// Fichier contenant la matrice de distances
+char *nomFichierMatrice = "FichierMatrice.xml";
+// Fichier resultat, a renvoyer au client
+char *nomFichierRes = "FichierRes.html";
 
 /**************************  Fonctions annexes *********************************/
 
@@ -246,13 +253,13 @@ ssize_t readLine(int fd, char *buffer, size_t n) {
 
 // Fonction refaite selon directives de Celine : elle recupere les infos en 
 // provenance du serveur HTTP (fichier XML) et elle les sauve dans un fichier 
-// "TMP.xml" (que la fonction parseDocument de Celine parsera)
-void get_answers_HTTP(int http_fd){ 
+// "FichierDataBase.xml" (que la fonction parseDocument de Celine parsera)
+void httpGet(char *nomFichierDataBase, int http_fd){ 
   int dest, n;
   int entete;
   char tampon[1025];
-  printf("**On recoit du serveur HTTP et on cree un fichier TMP.xml ... \n");
-  if ((dest=open("TMP.xml", O_WRONLY | O_CREAT, 0644)) != -1) {  // lecture du fichier XML
+  printf("**On recoit du serveur HTTP et on cree un fichier FichierDataBase.xml ... \n");
+  if ((dest=open(nomFichierDataBase, O_WRONLY | O_CREAT, 0644)) != -1) {  // lecture du fichier XML
     /*
     while ( (n=read(http_fd, tampon, 512)) != 0) {
       write(dest, tampon, n);
@@ -341,7 +348,7 @@ void connect_HTTP(int fd, int id, char name_serv_http[128]){
   }
   else {
     printf(" >>> Reception de la reponse du serveur HTTP <<< \n"); 
-    get_answers_HTTP(http_fd);
+    httpGet(nomFichierDataBase, http_fd);
   }
 }
 
@@ -357,10 +364,12 @@ void set_header_request_distmatrix(int id, char req[1024]){
   printf("-----> set header \n");
   FromXMLToGoogleMapHTTPRequest dataBaseParser(s);
 
-  dataBaseParser.parseDocument("TMP.xml");
+  dataBaseParser.parseDocument(nomFichierDataBase);
   printf("<----- parse document \n");
+  //sprintf(req, "GET /maps/api/distancematrix/xml?sensor=false&mode=driving&units=metric&%s HTTP/1.1\n", 
+  //	  (dataBaseParser.getGoogleMapHttpRequest_V2()).c_str());
   sprintf(req, "GET /maps/api/distancematrix/xml?sensor=false&mode=driving&units=metric&%s HTTP/1.1\n", 
-  	  (dataBaseParser.getGoogleMapHttpRequest_V2()).c_str());
+  	  (dataBaseParser.getGoogleMapHttpRequest(nomFichierDataBase,id)));
   sprintf(req, "%s%s\r\n", req, "Host: maps.googleapis.com\n");
   sprintf(req, "%s%s\r\n", req, "Accept: text/html,application/xhtml+xml,application/xml\n");
   sprintf(req, "%s%s\r\n", req, "Accept-Language: fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3-us\n");
@@ -371,76 +380,73 @@ void set_header_request_distmatrix(int id, char req[1024]){
 
 /**********  Fonctions pour traiter la reponse de Google Maps distance matrix *********/
 
+// Fonction de recuperation de la matrice de distance aupres de GoogleMap 
+// qui est placee dans FichierMatrice.xml
+int getDistanceMatrix (char *nomFichierMatrice, int mat_fd){ 
+  int n, entete, fin;
+  //printf(" <<<<<<<< FIN <<<<<<<<<<< \n");  
+  int ficmat;
+  char tampon_rep[1025];
+  init_buffer();
+  // lecture de la reponse de Google matrix, et mise dans un fichier "FichierMatrice.xml"
+  if ((ficmat=open(nomFichierMatrice, O_WRONLY | O_CREAT, 0644)) != -1) { 
+    /*
+      while ( (n=read(mat_fd, tampon, 512)) != 0) {
+      write(ficmat, tampon, n);
+      }
+    */
+    /* Update 25/11/2014 : */
+    entete = 1;
+    fin = 0;
+    while ( (n=readLine(mat_fd, tampon_rep, 1024)) != 0) {   // lecture d'une ligne
+      if (entete) {
+	if (strstr(tampon_rep, "<?xml") == tampon_rep){   // on arrive dans le xml, il faut 
+	  entete = 0;                                     // maintenant garder les lignes
+	  write(ficmat, tampon_rep, n);
+	}
+      }
+      else {      // on n'est plus dans l'entete, on recopie le texte qui est bon
+	if (!fin) {
+	  write(ficmat, tampon_rep, n);
+	  if (strstr(tampon_rep, "</DistanceMatrixResponse>") == tampon_rep) fin = 1;
+	}
+      }
+    }    
+    close(ficmat);
+    return 1;
+  }
+  else return 0;
+}
+
 // Fonction de traitement resultant du code de Celine (elle place tout dans 
 // un fichier, qu'on va faire passer au client) 
 void process_matrix (char *nomficres, int id){ 
-  SortVisits sorter;    
-  sorter.processDistanceMatrix("TMP.xml", nomficres, id, "TMP2.xml");
-  // FromGoogleMapXMLToDistanceTable googleMapParser;
-//   std::vector<std::string> * adresses;
-//   std::vector< std::vector<int> > * distances;
-//   std::ofstream f;
-//
-//   f.open(nomficres);
-//   adresses = googleMapParser.getAdresses();
-//   distances = googleMapParser.getDistances();
-//   sorter.modifyFile("char * filename", adresses);
-//   sorter.saveXHTMLFile("data/cabinetInfirmier.xml", nomficres, id);
-    //   for (unsigned int i = 0; i < adresses.size(); i++)
-    //     {
-    //       f << "| " << i << " | " << adresses.at(i) << " | " << std::endl;
-    //     }
-    //   f << std::endl;
-    //   f << std::endl;
-    //   // ??crire le tableau des distances avec les index
-    //   f << "     | ";
-    //   for(unsigned int c = 0; c < adresses.size(); c++) {
-    //     std::string spacesBefore = "";
-    //     if (c < 10)
-    //       spacesBefore = "   ";
-    //     else if (c < 100)
-    //       spacesBefore = "  ";
-    //     else if (c < 1000)
-    //       spacesBefore = " ";
-    //     else
-    //       spacesBefore = "";
-    //
-    //     f << spacesBefore << c <<  " | ";
-    //   }
-    //   f << std::endl << "  --------------------------------" << std::endl;
-    //   for (unsigned int ligne = 0; ligne < adresses.size(); ligne++)
-    //     {
-    //       f << "   " << ligne << " | ";
-    //       for (unsigned int colonne = 0; colonne < adresses.size(); colonne++)
-    // {
-    //   int value = (distances.at(ligne)).at(colonne);
-    //   std::string spacesBefore = "";
-    //   if (value < 10)
-    //     spacesBefore = "   ";
-    //   else if (value < 100)
-    //     spacesBefore = "  ";
-    //   else if (value < 1000)
-    //     spacesBefore = " ";
-    //   else
-    //     spacesBefore = "";
-    //   f << spacesBefore << value << " | ";
-    // }
-    //       f << std::endl << "  --------------------------------" << std::endl;
-    //     }
-    //   f.close();
+  SortVisits sorter;
+  sorter.processDistanceMatrix(nomFichierDataBase, nomFichierMatrice, id, nomficres);
+/*   FromGoogleMapXMLToDistanceTable googleMapParser; */
+/*   std::vector<std::string> adresses; */
+/*   std::vector< std::vector<int> > distances; */
+/*   std::ofstream f;  */
+
+/*   f.open(nomficres); */
+/*   adresses = googleMapParser.getAdresses(); */
+/*   distances = googleMapParser.getDistances(); */
+/*   sorter.modifyFile("char * filename", adresses); */
+/*   sorter.saveXHTMLFile("data/cabinetInfirmier.xml", nomficres, id); */
 }
 
 // Fonction pour la recuperation de la matrice de distances, et l'exploitation
-// de cette information (optimisation <<-- a faire)
+// de cette information (par fcts Celine et Quentin)
 void get_and_process_matrix(int id, int fd){ 
+  int n;
   char request_matrix[1024], buf2[512];
-  int mat_fd; 
+  char tampon[512];
+  int mat_fd, ficres; 
   char host[128]="maps.googleapis.com";
   int portnum;
   struct sockaddr_in sin;
   struct hostent *shes2;
-  int entete, fin; 
-
+ 
  /* Preparation of the connection */
   if(debug) printf("gethostbyname(%s)=",host);
   shes2 = gethostbyname(host);
@@ -492,7 +498,7 @@ void get_and_process_matrix(int id, int fd){
     fprintf(lfp,"Connected to %s:%d\n",host,portnum);	
     fflush(lfp);
   }
-  printf(" >>> Je contacte %s et j'envoie %s\n", host, request_matrix);  
+  printf(" >>> Je contacte %s et j'envoie la requete %s\n", host, request_matrix);  
   if(write(mat_fd,request_matrix,strlen(request_matrix))<1) {
     perror("write");
     close(fd);
@@ -500,49 +506,17 @@ void get_and_process_matrix(int id, int fd){
     return;
   }
   else {
-    int n;
-    printf(" <<<<<<<< FIN <<<<<<<<<<< \n");  
-    int ficmat, ficres;
-    char tampon[512];
-    char tampon_rep[1025];
-    init_buffer();
-    // lecture de la reponse de Google matrix, et mise dans un fichier "TMP2.xml"
-    if ((ficmat=open("TMP2.xml", O_WRONLY | O_CREAT, 0644)) != -1) { 
-      /*
-      while ( (n=read(mat_fd, tampon, 512)) != 0) {
-	write(ficmat, tampon, n);
-      }
-      */
-      /* Update 25/11/2014 : */
-      entete = 1;
-      fin = 0;
-      while ( (n=readLine(mat_fd, tampon_rep, 1024)) != 0) {   // lecture d'une ligne
-	if (entete) {
-	  if (strstr(tampon_rep, "<?xml") == tampon_rep){   // on arrive dans le xml, il faut 
-	    entete = 0;                                     // maintenant garder les lignes
-	    write(ficmat, tampon_rep, n);
-	  }
-	}
-	else {      // on n'est plus dans l'entete, on recopie le texte qui est bon
-	  if (!fin) {
-	    write(ficmat, tampon_rep, n);
-	    if (strstr(tampon_rep, "</DistanceMatrixResponse>") == tampon_rep) fin = 1;
-	  }
-	}
-      }
-
-      close(ficmat);
+    if (getDistanceMatrix (nomFichierMatrice, mat_fd)){  // recuperation de la matrice
       // traitement 
-      process_matrix("res.html", id);
+      process_matrix(nomFichierRes, id);
       // envoi au client
       printf(" >>> Envoi final de la reponse au client...\n\n");
-      if ((ficres=open("res.html", O_RDONLY)) != -1) {
-          
-          std::string s = "HTTP/1.0 200 OK\nContent-Type: text/html\n\n";
-          write(fd, s.c_str(), s.size());
-	      while ( (n=read(ficres, tampon, 512)) != 0) {
-	          write(fd, tampon, n);
-	      }
+      if ((ficres=open(nomFichierRes, O_RDONLY)) != -1) {
+	std::string s = "HTTP/1.0 200 OK\nContent-Type: text/html\n\n";
+	write(fd, s.c_str(), s.size());
+	while ( (n=read(ficres, tampon, 512)) != 0) {
+	  write(fd, tampon, n);
+	}
 	close(ficres);
       }
       else
@@ -648,7 +622,7 @@ int fdserve(int fd){
 	if (strstr(line, "ID=")==line){
 	  strncpy(str_id, line+3, 10);    // id sous forme de chaine de car
 	  id = atoi(str_id);              // id converti en entier
-	  process_nurse_request(fd,id,"localhost");
+	  process_nurse_request(fd,id,nomServeurNodeJS);
 	}
 	else 
 	  fdsend(fd,"Error ", "Nurse id", "No nurse id in your request.");

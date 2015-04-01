@@ -13,7 +13,7 @@
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
 
-#include "Adresse.h"
+#include "Address.h"
 #include "FromGoogleMapXMLToDistanceTable.h"
 
 // Constructeur
@@ -46,7 +46,7 @@ void SortVisits::processDistanceMatrix(char * inputFileName, char * outputFileNa
 }
 
 std::string SortVisits::getPatientNodeAdresse(xmlpp::Node * adresseNode) {
-    Adresse adresse;
+    Address adresse;
     xmlpp::Node * node;
     xmlpp::Element * element;
     

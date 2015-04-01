@@ -1,44 +1,52 @@
+#ifndef FROMXMLTOGOOGLEMAPHTTPREQUEST_H
+#define FROMXMLTOGOOGLEMAPHTTPREQUEST_H
+
 #include "LwSaxParser.h"
-
-
 #include <string>
+#include "Address.h"
+// Forward declaration of a Class
+// See http://read.pudn.com/downloads106/ebook/438804/CPP101.pdf
 
-class Adresse;
 class FromXMLToGoogleMapHTTPRequest : public LwSaxParser {
 
 public:
+    // Enumération des différents états possible du parseur
     enum PossibleStates {START, PATIENT, ADRESSE, ETAGE, NUMERO, RUE, VILLE, CODEPOSTAL, VISITE, OTHER};
     
     /// Constructeur
-    FromXMLToGoogleMapHTTPRequest(std::string id);
+    FromXMLToGoogleMapHTTPRequest();
     
     /// Desctructeur
     ~FromXMLToGoogleMapHTTPRequest();
-    
-    std::string getGoogleMapHttpRequest();
 
-    std::string getGoogleMapHttpRequest_V2();
+    /** LA méthode qui est appelée par le proxy pour récupérer la requête http à 
+     *   envoyer à GoogleMap pour récupérer la matrice des distances.
+     * @dataBaseFileName nom du fichier XML de la base de données infirmières
+     * @nurseNumber numéro de l'infirmière pour laquelle le serveur demande la requette
+     */
+    char * getGoogleHttpRequest(char * dataBaseFileName, int nurseNumber);
     
 protected:
-    bool adresseCabinet;
     
-    /// Attributs
-    std::string request;
+    /// Est-on en train de lire l'adresse du cabinet plutôt que celle d'un patient ?
+    bool isCabinet;
     
     /// id de l'infirmière
-    std::string id;
+    std::string nurseId;
     
     /// Etat courant
-    PossibleStates state;
+    PossibleStates currentState;
     
-    /// Stockage des listes d'adresse
-    std::string listeAdresses;
+    /// Stockage des listes d'adresse au format GoogleMap
+    std::string addressList;
     
-    Adresse * adresseCourante;
+    /// Stockage de la requete Google sous forme de std::string (plus simple à manipuler)
+    std::string request;
     
-    /// Stockage temporaire de l'adresse courante
+    /// Adresse que l'on est en train de remplir
     ///  Elle sera ajoutée à listeAdresse après vérification qu'un élément visite contient bien l'id de l'infirmière
-//    std::string adresseCourante;
+    Address * currentAddress;
+        
     
    /** 
     * Méthodes ré-implemntées (surchargées) de la classe SaxParser
@@ -78,3 +86,4 @@ protected:
 
 };
 
+#endif;

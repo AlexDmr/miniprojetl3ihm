@@ -54,10 +54,10 @@ void LwSaxParser::on_start_element(const Glib::ustring& name, const AttributeLis
   std::cout << "Appel de la méthode: on_start_element(const Glib::ustring& name, const AttributeList& attributes)" << std::endl;
 
   std::cout << "    avec les arguments suivants: " << std::endl;
-  std::cout << "      - name: " << name << std::endl;
+  std::cout << "      - name: " << name.c_str() << std::endl;
   for(xmlpp::SaxParser::AttributeList::const_iterator iter = attributes.begin(); iter != attributes.end(); ++iter)
   {
-    std::cout << "      - attribute: (" << iter->name << " = " << iter->value << ")" << std::endl;
+    std::cout << "      - attribute: (" << iter->name.c_str() << " = " << iter->value.c_str() << ")" << std::endl;
   }
 }
 
@@ -65,28 +65,28 @@ void LwSaxParser::on_end_element(const Glib::ustring& name)
 {
   std::cout << "Appel de la méthode: on_end_element(const Glib::ustring& name) " << std::endl;
   std::cout << "    avec les arguments suivants: " << std::endl;
-  std::cout << "      - name: " << name << std::endl;
+  std::cout << "      - name: " << name.c_str() << std::endl;
 }
 
 void LwSaxParser::on_characters(const Glib::ustring& text)
 {
     std::cout << "Appel de la méthode: on_characters(const Glib::ustring& text) " << std::endl;
     std::cout << "    avec les arguments suivants: " << std::endl;
-    std::cout << "      - text: " << text << std::endl;
+    std::cout << "      - text: " << text.c_str() << std::endl;
 }
 
 
 void LwSaxParser::on_warning(const Glib::ustring& text)
 {
-  std::cout << "on_warning(): " << text << std::endl;
+  std::cout << "on_warning(): " << text.c_str() << std::endl;
 }
 
 void LwSaxParser::on_error(const Glib::ustring& text)
 {
-  std::cout << "on_error(): " << text << std::endl;
+  std::cout << "on_error(): " << text.c_str() << std::endl;
 }
 
 void LwSaxParser::on_fatal_error(const Glib::ustring& text)
 {
-  std::cout << "on_fatal_error(): " << text << std::endl;
+  std::cout << "on_fatal_error(): " << text.c_str() << std::endl;
 }

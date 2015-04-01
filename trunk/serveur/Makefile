@@ -1,20 +1,20 @@
 CC=g++
 CFLAGS= -Wall -Wextra
 XMLPREFIX=./XML_process
-OBJS=proxy-L3.o $(XMLPREFIX)/LwSaxParser.o $(XMLPREFIX)/FromXMLToGoogleMapHTTPRequest.o $(XMLPREFIX)/FromGoogleMapXMLToDistanceTable.o $(XMLPREFIX)/SortVisits.o $(XMLPREFIX)/Adresse.o 
+OBJS=proxy-metier.o $(XMLPREFIX)/LwSaxParser.o $(XMLPREFIX)/FromXMLToGoogleMapHTTPRequest.o $(XMLPREFIX)/FromGoogleMapXMLToDistanceTable.o $(XMLPREFIX)/SortVisits.o $(XMLPREFIX)/Adresse.o 
 INCLUDEFLAGS= -I$(XMLPREFIX) $(shell pkg-config --cflags libxml++-2.6) -I/opt/local/include/curl
 LDLIBS=-L/opt/local/lib $(shell pkg-config --libs libxml++-2.6) -lcurl -lxslt
 
-all: proxy-L3
+all: proxy-metier
 
-proxy-L3: $(OBJS)
-	$(CC) $(LDLIBS) $(OBJS) -o proxy-L3 
+proxy-metier: $(OBJS)
+	$(CC) $(LDLIBS) $(OBJS) -o proxy-metier
 
-proxy-L3.o : $(XMLPREFIX)/FromXMLToGoogleMapHTTPRequest.o $(XMLPREFIX)/LwSaxParser.o $(XMLPREFIX)/SortVisits.o $(XMLPREFIX)/Adresse.o proxy-L3.c
-	$(CC) -c $(CFLAGS) $(INCLUDEFLAGS) proxy-L3.c -o proxy-L3.o
+proxy-metier.o : $(XMLPREFIX)/FromXMLToGoogleMapHTTPRequest.o $(XMLPREFIX)/LwSaxParser.o $(XMLPREFIX)/SortVisits.o $(XMLPREFIX)/Adresse.o proxy-metier.c
+	$(CC) -c $(CFLAGS) $(INCLUDEFLAGS) proxy-metier.c -o proxy-metier.o
 
 clean:
-	rm -rf *o *~ TMP.xml TMP2.xml res.txt
+	rm -rf *o *~ FichierDataBase.xml FichierMatrice.xml FichierRes.html
 
 realclean: clean
-	rm -rf proxy-L3
+	rm -rf proxy-metier

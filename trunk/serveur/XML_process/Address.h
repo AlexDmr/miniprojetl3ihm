@@ -1,6 +1,9 @@
+#ifndef ADDRESS_H
+#define ADDRESS_H
+
 #include <string>
 
-class Adresse {
+class Address {
 
 private:
     bool hasNumero;
@@ -10,7 +13,7 @@ private:
     std::string codePostal;
     
 public:
-    Adresse();
+    Address();
     void setNumero(std::string numero);
     void setRue(std::string rue);
     void setVille(std::string ville);
@@ -18,3 +21,5 @@ public:
     std::string getGoogleAdresse();
     std::string getGoogleAnswerAdress();    
 };
+
+#endif

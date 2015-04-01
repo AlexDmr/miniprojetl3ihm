@@ -1,6 +1,6 @@
-#include "Adresse.h"
+#include "Address.h"
 
-Adresse::Adresse() {
+Address::Address() {
     hasNumero = false;
     numero = "";
     rue = "";
@@ -8,21 +8,21 @@ Adresse::Adresse() {
     codePostal = "";
 }
 
-void Adresse::setNumero(std::string numero) {
+void Address::setNumero(std::string numero) {
     this->numero = numero;
     this->hasNumero = true;
 }
-void Adresse::setRue(std::string rue) {
+void Address::setRue(std::string rue) {
     this->rue = rue;
 }
-void Adresse::setVille(std::string ville) {
+void Address::setVille(std::string ville) {
     this->ville = ville;
 }
-void Adresse::setCodePostal(std::string codePostal) {
+void Address::setCodePostal(std::string codePostal) {
     this->codePostal = codePostal;
 }
 
-std::string Adresse::getGoogleAdresse() {
+std::string Address::getGoogleAdresse() {
     std::string resultat = ville;
     resultat += "+" + codePostal;
     if (hasNumero) {
@@ -33,7 +33,7 @@ std::string Adresse::getGoogleAdresse() {
     return resultat;
 }
 
-std::string Adresse::getGoogleAnswerAdress() {
+std::string Address::getGoogleAnswerAdress() {
     std::string adresse = "";
     if (! numero.empty()) {
         adresse += numero + " ";
