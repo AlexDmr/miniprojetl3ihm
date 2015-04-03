@@ -28,7 +28,7 @@ FromXMLToGoogleMapHTTPRequest::~FromXMLToGoogleMapHTTPRequest() {
 char * FromXMLToGoogleMapHTTPRequest::getGoogleHttpRequest(char * dataBaseFileName, int nurseNumber) {
     char * result;
     // Convertir l'entier nurseNumber en std::string pour pouvoir le stocker dans l'attribut id
-    // Possible en C -> lire l'API doc de la méthode itoa
+    // Possible en C -> lire l'API doc de la méthode itoa ou sprintf
     // Plus simple en C++ en utilisant la STL
     std::ostringstream nbStr;
     if (nurseNumber < 100) {

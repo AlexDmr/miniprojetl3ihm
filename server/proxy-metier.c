@@ -362,14 +362,12 @@ void set_header_request_distmatrix(int id, char req[1024]){
   sprintf(numero, "%d", id);
   std::string s(numero);
   printf("-----> set header \n");
-  FromXMLToGoogleMapHTTPRequest dataBaseParser(s);
+  FromXMLToGoogleMapHTTPRequest dataBaseParser;
 
-  dataBaseParser.parseDocument(nomFichierDataBase);
-  printf("<----- parse document \n");
   //sprintf(req, "GET /maps/api/distancematrix/xml?sensor=false&mode=driving&units=metric&%s HTTP/1.1\n", 
   //	  (dataBaseParser.getGoogleMapHttpRequest_V2()).c_str());
   sprintf(req, "GET /maps/api/distancematrix/xml?sensor=false&mode=driving&units=metric&%s HTTP/1.1\n", 
-  	  (dataBaseParser.getGoogleMapHttpRequest(nomFichierDataBase,id)));
+  	  (dataBaseParser.getGoogleHttpRequest(nomFichierDataBase,id)));
   sprintf(req, "%s%s\r\n", req, "Host: maps.googleapis.com\n");
   sprintf(req, "%s%s\r\n", req, "Accept: text/html,application/xhtml+xml,application/xml\n");
   sprintf(req, "%s%s\r\n", req, "Accept-Language: fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3-us\n");
@@ -422,7 +420,7 @@ int getDistanceMatrix (char *nomFichierMatrice, int mat_fd){
 // un fichier, qu'on va faire passer au client) 
 void process_matrix (char *nomficres, int id){ 
   SortVisits sorter;
-  sorter.processDistanceMatrix(nomFichierDataBase, nomFichierMatrice, id, nomficres);
+  sorter.processDistanceMatrix(nomFichierDataBase, nomFichierMatrice, id, "data/cabinetToInfirmier.xsl", nomficres);
 /*   FromGoogleMapXMLToDistanceTable googleMapParser; */
 /*   std::vector<std::string> adresses; */
 /*   std::vector< std::vector<int> > distances; */
