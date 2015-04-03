@@ -25,7 +25,7 @@ SortVisits::~SortVisits() {
     
 }
 
-void SortVisits::processDistanceMatrix(char * inputFileName, char * outputFileName, int id, char * googleAnswer) {
+void SortVisits::processDistanceMatrix(char * inputFileName, char * googleAnswer, int id, char * xslFilename, char * outputFileName) {
     FromGoogleMapXMLToDistanceTable googleMapParser;
     std::vector<std::string> * adresses;
     std::vector< std::vector<int> > * distances;
@@ -41,7 +41,7 @@ void SortVisits::processDistanceMatrix(char * inputFileName, char * outputFileNa
     tmpFileName += "-sorted.xml";
     
     modifyFile(inputFileName, adresses, tmpFileName.c_str());
-    saveXHTMLFile(inputFileName, outputFileName, id);
+    saveXHTMLFile(inputFileName, xslFilename,outputFileName, id);
     
 }
 
@@ -89,6 +89,8 @@ std::string SortVisits::getPatientNodeAdresse(xmlpp::Node * adresseNode) {
     
     return adresse.getGoogleAnswerAdress();
 }
+
+
 /// Faire le job...
 void SortVisits::modifyFile(const char * inputFilename, std::vector<std::string> * adresses, const char * outputFilename) {
     std::cout << " Modifying xml file..." << std::endl;
@@ -167,49 +169,67 @@ xmlpp::Element * SortVisits::findAdresseInMap(std::string sortedAdresse, std::ma
     return element;
 }
 
+// Ouvre le fichier inputXMLFile, lui applique la transformation XSLT contenue dans le
+// fichier xslTransformationFile avec le paramètre nurseId et sauvegarde le résultat dans le
+// fichier outputXHTMLFile.
 //See http://libxmlplusplus.sourceforge.net/docs/manual/html/ar01s02.html
-void SortVisits::saveXHTMLFile(char * inputXMLFile, char * outputXHTMLFile, int id)
+void SortVisits::saveXHTMLFile(char * inputXMLFile, char * xslTransformationFile, char * outputXHTMLFile, int nurseId)
 {
+    // File descriptor pour le fichier de sortie
     FILE *outFile = NULL;
-//    const xmlChar * xsltFile = (const xmlChar *) ("data/ex.xsl");
+    
+    // libXML ne prend en paramètre que des xmlChar* et non des char*. 
+    // Une conversion explicite doit donc être faite
+    // Fichier xml d'entrée
     const xmlChar * xmlFile  = (const xmlChar *) (inputXMLFile);
-    const char *params[16 + 1];
-    	
-    int nbparams = 0;
-    xsltStylesheetPtr cur = NULL;
-    xmlDocPtr doc, res;
+    // Fichier de transformation
+    xsltStylesheetPtr xslST = xsltParseStylesheetFile((const xmlChar *) (xslTransformationFile));
+
+    const char *params[16 + 1];    	
+    int nbparams = 0;        
+    
+    // On transforme l'identifiant de l'infirmière en chaîne de caractères     
+    // Convertir l'entier nurseNumber en std::string pour pouvoir le stocker dans l'attribut id
+    // Possible en C -> lire l'API doc de la méthode itoa
+    char * idStr = new char[4];
+    if (nurseId < 100) {
+        if (nurseId < 10) {
+            sprintf(idStr, "00%d", nurseId);
+        } else {
+            sprintf(idStr, "0%d", nurseId);
+        }
+    }
+    else {
+        sprintf(idStr, "%d", nurseId);
+    }
         
-    char * nurseId = new char[4];
-    sprintf(nurseId, "00%d", id);
-        
-    std::cout <<"Save XHTML File: input " << inputXMLFile << ", output: " << outputXHTMLFile << " with nurseId: " << nurseId << std::endl;
+    std::cout <<"Save XHTML File: input " << inputXMLFile << ", output: " << outputXHTMLFile << " with nurseId: " << idStr << std::endl;
 
 	params[0] = "destinedId";
-    params[1] = nurseId;
+    params[1] = idStr;
     params[2] = NULL;
     
 	xmlSubstituteEntitiesDefault(1);
 	xmlLoadExtDtdDefaultValue = 1;
-	cur = xsltParseStylesheetFile((const xmlChar *) ("data/cabinetToInfirmier.xsl"));
 
-	doc = xmlParseFile(inputXMLFile);
-    
-	res = xsltApplyStylesheet(cur, doc, params);
+	xmlDocPtr doc = xmlParseFile(inputXMLFile);    
+	xmlDocPtr res = xsltApplyStylesheet(xslST, doc, params);
+
     outFile=(fopen(outputXHTMLFile,"w"));
        if(outFile==NULL){
            printf("Error!");
            exit(1);
        }
-    xsltSaveResultToFile(outFile, res, cur);
+
+    xsltSaveResultToFile(outFile, res, xslST);
 
     fclose(outFile);
     
-	xsltFreeStylesheet(cur);
+	xsltFreeStylesheet(xslST);
 	xmlFreeDoc(res);
 	xmlFreeDoc(doc);
 
     xsltCleanupGlobals();
     xmlCleanupParser();
-
     
 }

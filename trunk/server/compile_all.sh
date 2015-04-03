@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "------------- Compilation API XML -------------"
-cd XML_process ; make
+cd xml-parsers ; make
 success=$?
 echo
 [ $success -eq 0 ] && (echo "------------ Compilation proxy --------------"; cd .. ; make proxy-metier)

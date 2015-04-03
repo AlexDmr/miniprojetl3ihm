@@ -10,6 +10,14 @@
         <ville>Grenoble</ville>
         <codePostal>38041</codePostal>
     </adresse>
+    <receptionnistes>
+        <receptionniste id="001">
+            <nom>Nouie</nom>
+            <prénom>Eva</prénom>
+            <!-- Les icones proviennent du site http://www.fancyicons.com/icones-gratuites/108/medical-icon-set/gratuit-infirmier-icon-png/ -->
+            <photo>eva.png</photo>
+        </receptionniste>
+    </receptionnistes>
     <infirmiers>
         <infirmier id="001">
             <nom>Versaire</nom>
@@ -22,9 +30,9 @@
             <photo>sally.jpg</photo>
         </infirmier>
         <infirmier id="003">
-            <nom>Nouie</nom>
-            <prénom>Eva</prénom>
-            <photo>eva.jpg</photo>
+            <nom>Naline</nom>
+            <prénom>André</prénom>
+            <photo>andre.png</photo>
         </infirmier>
     </infirmiers>
     <patients>
@@ -37,16 +45,15 @@
             453e naissance (clé calculée: 19)-->
             <numéro>193061305545319</numéro>
             <adresse>
-                <étage>4</étage>
+                <!-- Question: pourquoi pas d'accent au  nom de la balise étage ?...
+                    ... règle de nommage, un nom de balise doit commencer par un caractère
+                    alphabétique non accentué... -->
+                <etage>4</etage>
                 <numéro>46</numéro>
                 <rue>avenue Félix Viallet</rue>
                 <ville>Grenoble</ville>
                 <codePostal>38031</codePostal>            
             </adresse>
-                <!-- Ici, j'ai choisi d'identifier l'infirmière par un numéro.
-                Un prénom peut porter à confusion.
-                Un login peut être ok -->
-                
                 <!-- 
                 Axel a eu un accident de moto à cause duquel il a dû être opéré.
                 Il est immobilisé pour un mois et doit donc recevoir des injections
@@ -105,7 +112,7 @@
                 jour et injection intraveineuse directe isolée d'anthalgiques les 
                 autres jours.
                 -->
-                <visite date="2014-12-08" intervenant="001">
+                <visite date="2014-12-08" intervenant="002">
                     <acte id="101"/>
                     <acte id="104"/>               
                 </visite>
@@ -139,7 +146,7 @@
             <prénom>Jean</prénom>
             <sexe>M</sexe>
             <naissance>1910-08-02</naissance>
-            <!-- Né dans le Doubs, il y a 104 ans dans le commune de Les Combes 
+            <!-- Né dans le Doubs, il y a 105 ans dans le commune de Les Combes 
             (n° 160), 20e naissance (clé calculée: 10) -->
             <numéro>110082516002010</numéro>
             <adresse>            
@@ -150,8 +157,7 @@
             </adresse>
                 <visite date="2014-12-08" intervenant="002">
                     <acte id="401"/>
-                </visite>
-                
+                </visite>                
         </patient>
     </patients>
 </cabinet>

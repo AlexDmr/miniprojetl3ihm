@@ -1,6 +1,8 @@
 #include <string>
 #include <vector>
 #include <map>
+
+
 /*
  * Classe qui contient un parser DOM pour modifier le fichier d'entrée
  *  en y ajoutant l'ordre des adresses à visiter
@@ -20,13 +22,15 @@ public:
     ~SortVisits();
     
     /// Méthode qui fait tout
-    void processDistanceMatrix(char * inputFileName, char * outputFileName, int id, char * googleAnswer);
+    void processDistanceMatrix(char * inputFileName, char * googleAnswer, int id, char * xslFilename, char * outputFileName);
     
-    /// Faire le job...
+    /// Ré-ordonne la liste des patients contenus dans inputFilename et correspondant à
     void modifyFile(const char * inputFilename, std::vector<std::string> * adresses, const char * outputFilename);
     
-    /// Faire du xslt
-    void saveXHTMLFile(char * inputXMLFile, char * outputXHTMLFile, int id);
+    /// Ouvre le fichier inputXMLFile, lui applique la transformation XSLT contenue dans le
+    /// fichier xslTransformationFile avec le paramètre nurseId et sauvegarde le résultat dans le
+    /// fichier outputXHTMLFile.
+    void saveXHTMLFile(char * inputXMLFile, char * xslTransformationFile, char * outputXHTMLFile, int nurseId);
     
 protected:
     std::string getPatientNodeAdresse(xmlpp::Node * adresseNode);
