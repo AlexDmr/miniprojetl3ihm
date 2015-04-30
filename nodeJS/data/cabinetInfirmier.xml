@@ -101,7 +101,7 @@
                 jour et injection intraveineuse directe isolée d'anthalgiques les 
                 autres jours.
                 -->
-                <visite date="2014-12-08" intervenant="003">
+                <visite date="2014-12-08" intervenant="001">
                     <acte id="101"/>
                     <acte id="104"/>               
                 </visite>
@@ -144,10 +144,10 @@
                 <ville>Montbonnot-Saint-Martin</ville>
                 <codePostal>38330</codePostal>
             </adresse>
-                <visite date="2014-12-08" intervenant="001">
+                <visite date="2014-12-08" intervenant="002">
                     <acte id="401"/>
                 </visite>
                 
         </patient>
-    </patients>
-</cabinet>
+        </patients>
+    </cabinet>

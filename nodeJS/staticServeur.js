@@ -220,8 +220,8 @@ var RRServer = {
 										res.write( "Unknown id " + req.body.id);
 									   }
              */
-             res.writeHead(0);
-             res.write(self.xmlSerializer.serializeToString(self.doc));
+             res.writeHead(200);
+             res.write( self.xmlSerializer.serializeToString(self.doc));
 							 res.end();
 							}
 				);
