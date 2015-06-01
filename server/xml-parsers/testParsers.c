@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include <iostream>
 #include "FromXMLToGoogleMapHTTPRequest.h"
 #include "FromGoogleMapXMLToDistanceTable.h"

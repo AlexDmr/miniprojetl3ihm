@@ -440,7 +440,8 @@ void get_and_process_matrix(int id, int fd){
   char request_matrix[1024], buf2[512];
   char tampon[512];
   int mat_fd, ficres; 
-  char host[128]="maps.googleapis.com";
+  //  char host[128]="maps.googleapis.com";
+  char host[128] = "www-cache.ujf-grenoble.fr";
   int portnum;
   struct sockaddr_in sin;
   struct hostent *shes2;
@@ -464,7 +465,9 @@ void get_and_process_matrix(int id, int fd){
     host_error(host, buf2, fd); 
     return;
   }
-  portnum=PORT_GOOGLE;
+  //  portnum=PORT_GOOGLE;
+  portnum=3128;
+
   if(debug) printf("Trying %s on port %d...\n",host,portnum);
   sin.sin_family = AF_INET;
   bcopy(shes2->h_addr,&sin.sin_addr,sizeof(struct in_addr)) ;
