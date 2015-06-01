@@ -1,8 +1,8 @@
-{"name"	: "AlxAppsGateClient"
+{"name"	: "L3MiageProjetIntegrateur"
 	, "email"	: "alexandre.demeure@inria.fr"
-	, "url"		: "http://iihm.imag.fr/demeure"
+	, "url"		: "https://github.com/AlexDmr/miniprojetl3ihm"
 	, "version"	: "0.0.2"
-	, "repository": { "type" : "svn"
+	, "repository": { "type" : "git"
 					, "url" : "http://alxappsgateclient.googlecode.com/svn/trunk/"
 					}
 	, "dependencies": {
@@ -12,5 +12,6 @@
 		, "request"		: ">=2.33"
 		, "body-parser"	: ">=1.4.3"
 		, "multer"		: ">=0.1.4"
+		, "request"		: "latest"
     }
 }
