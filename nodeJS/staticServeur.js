@@ -7,7 +7,10 @@ var fs				= require('fs-extra')				// Access files
   , DOMParser		= require('xmldom').DOMParser		// DOM parser 	  (string -> DOM)
   , XMLSerializer	= require('xmldom').XMLSerializer	// DOM serializer (DOM -> string)
   , multer			= require('multer')					// plugin for transmiting file via HTTP
-  , request			= require('request');				// send HTTP queries
+  , request			= require('request')				// send HTTP queries
+  , xmlSerializer	= null
+  , domParser		= null
+  ;
 
   /**_________________________________________________________________________________________________________________________________ 
   * Save the XML into a file, file acces is asynchronous -----------------------------------------------------------------------------
@@ -47,9 +50,9 @@ function getPatient(doc, number) {
   *   - port : the TCP port on which the HTTP server will be listening -------------------------------------------------------------
 **/
 function init(port) {
-	var domParser		= new DOMParser()			// an instance of DOM parser     (string -> DOM)
-	  , xmlSerializer	= new XMLSerializer()		// an instance of DOM serializer (DOM -> string)
-	  , doc											// will reference the document representing the XML structure
+	domParser		= new DOMParser()				// an instance of DOM parser     (string -> DOM)
+	xmlSerializer	= new XMLSerializer()			// an instance of DOM serializer (DOM -> string)
+	var doc											// will reference the document representing the XML structure
 	  , app											// will reference the HTTP server
 	  , applicationServer = {ip: '127.0.0.1', port: port}	// Application server IP and port that is in charge of optimizing nurses' travels, by default, this server
 	  ;
@@ -59,10 +62,10 @@ function init(port) {
 				, function(err, dataObj) {
 					 if(err) {
 						 console.error("Problem reading file /data/cabinetInfirmier.xml", err);
-						} else {try {console.log("typeof data :", typeof data );
-									 var data = new String();
+						} else {try {console.log("typeof dataObj :", typeof dataObj );
+									 var data = ""; //new String();
 									 data = data.concat(dataObj);
-									 doc  = self.domParser.parseFromString(data, 'text/xml');
+									 doc  = domParser.parseFromString(data, 'text/xml');
 									 console.log("/data/cabinetInfirmier.xml successfully parsed !");
 									} catch(err2) {console.error('Problem parsing /data/cabinetInfirmier.xml', err2);}
 							   }
@@ -70,11 +73,12 @@ function init(port) {
 				);
 				
 	// Initialize the HTTP server
-	app	 = express().use( express.static(__dirname) )						// Associate ressources for accessing local files
-					.use( bodyParser.urlencoded({ extended: false }) )		// Add a parser for urlencoded HTTP requests
-					.use( bodyParser.json() )								// Add a parser for json HTTP request
-					.use( multer({ dest: './uploads/'}) )					// Add a parser for file transmission
-					.listen(port) ;											// HTTP server listen to this TCP port
+	app	= express();
+	app .use( express.static(__dirname) )						// Associate ressources for accessing local files
+		.use( bodyParser.urlencoded({ extended: false }) )		// Add a parser for urlencoded HTTP requests
+		.use( bodyParser.json() )								// Add a parser for json HTTP request
+		.use( multer({ dest: './uploads/'}) )					// Add a parser for file transmission
+		.listen(port) ;											// HTTP server listen to this TCP port
 	
 	// Define HTTP ressource GET /
 	app.get	( '/'
@@ -87,9 +91,9 @@ function init(port) {
 										 return res.end('Error loading start.html : ' + err);
 										}
 									// Parse it so that we can add secretary and all nurses
-									var doc = self.domParser.parseFromString( data.toString() );
+									var doc = domParser.parseFromString( data.toString() );
 									var datalist = doc.getElementById('logins');
-									var L_nurses = self.doc.getElementsByTagName('infirmier');
+									var L_nurses = doc.getElementsByTagName('infirmier');
 									for(var i=0; i<L_nurses.length; i++) {
 										 var option = doc.createElement('option');
 										 option.setAttribute( 'value', L_nurses[i].getAttribute('id') );
@@ -100,7 +104,7 @@ function init(port) {
 										 datalist.appendChild(option);
 										}
 									res.writeHead(200);
-									res.write( self.xmlSerializer.serializeToString(doc) );
+									res.write( xmlSerializer.serializeToString(doc) );
 									res.end();
 								  });
 				}
