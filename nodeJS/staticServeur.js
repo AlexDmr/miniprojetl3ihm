@@ -18,7 +18,7 @@ var fs				= require('fs-extra')				// Access files
   *   - res : the result stream of a client HTTP request -----------------------------------------------------------------------------
 **/
 function saveXML(doc, res) {
-	fs.wriFile	( './data/cabinetInfirmier.xml'
+	fs.writeFile( './data/cabinetInfirmier.xml'
 				, xmlSerializer.serializeToString( doc )
 				, function(err) { // callback
 					 if (err) {
@@ -237,6 +237,13 @@ function init(port) {
 			);
 
 	// Define HTTP ressource POST /INFIRMIERE
+	app.post( '/configureOptimizationServer'
+			, function(req, res) {
+				 var IP	  = req.body.IP
+				   , port = req.body.port;
+				 
+				}
+			);
 	app.post( '/INFIRMIERE'
 			, function(req, res) {
 				 res.end("INFIRMIERE " + req.body.id + ". WARNING: You should configure the optimization application server IP and port. By default, the optimization application server is configured to be the HCI one.");

@@ -15,7 +15,7 @@ Projet à tester sous Linux
     B) Récupération du code de correction sur SVN         
 - Récupération du code:
     Créer un répertoire ProjetApplicatifIntegrateur (par exemple) et un sous-répertoire Correction
-        > svn checkout https://miniprojetl3ihm.googlecode.com/svn/trunk/ Correction
+        > svn checkout https://github.com/AlexDmr/miniprojetl3ihm
 
 - Le code a l'arborescence suivante:
                 
