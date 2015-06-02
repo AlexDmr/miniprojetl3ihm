@@ -219,15 +219,19 @@ ssize_t readLine(int fd, char *buffer, size_t n) {
   size_t totRead;                     /* Total bytes read so far */
   char *buf;
   char ch;
-  
+
+  printf("----> readline \n");   
   if (n <= 0 || buffer == NULL) {
     errno = EINVAL;
     return -1;
   }
   buf = buffer;                   /* No pointer arithmetic on "void *" (????!!!) */
   totRead = 0;
+
   for (;;) {
+    printf("----> for(;;)\n");
     numRead = read(fd, &ch, 1);
+    printf("<---- for(;;)\n");
     if (numRead == -1) {
       if (errno == EINTR)         /* Interrupted --> restart read() */
 	continue;
@@ -248,6 +252,7 @@ ssize_t readLine(int fd, char *buffer, size_t n) {
     }
   }
   *buf = '\0';
+  printf("<---- readline %d \n", totRead);   
   return totRead;
 }
 
@@ -339,17 +344,18 @@ void connect_HTTP(int fd, int id, char name_serv_http[128]){
     fflush(lfp);
   }
   /* write to server */
+  /*
   printf(" >>> Transmission de la requete au serveur %s sur port %d <<< \n", 
 	 name_serv_http, portnum);  
+  printf("--%s--", buffer);
   if(write(http_fd,buffer,strlen(buffer))<1) {
     perror("write");
     close(fd); close(http_fd);
     return;
   }
-  else {
-    printf(" >>> Reception de la reponse du serveur HTTP <<< \n"); 
-    httpGet(nomFichierDataBase, http_fd);
-  }
+  */
+  printf(" >>> Reception de la reponse du serveur HTTP <<< \n"); 
+  httpGet(nomFichierDataBase, http_fd);
 }
 
 

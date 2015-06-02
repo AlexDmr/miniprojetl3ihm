@@ -1,5 +1,6 @@
 #include "SortVisits.h"
 #include <iostream>
+#include <algorithm> 
 #include <string.h>
 #include <libxml/xmlmemory.h>
 #include <libxml/debugXML.h>
