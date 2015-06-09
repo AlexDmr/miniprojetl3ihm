@@ -4,18 +4,19 @@
 var fs				= require('fs-extra')				// Access files
 , express			= require('express')				// Framework to implement HTTP server
 , bodyParser		= require("body-parser")			// plugin for parsing HTTP requests
-, DOMParser		= require('xmldom').DOMParser		// DOM parser 	  (string -> DOM)
-, XMLSerializer	= require('xmldom').XMLSerializer	// DOM serializer (DOM -> string)
+, DOMParser		= require('xmldom').DOMParser			// DOM parser 	  (string -> DOM)
+, XMLSerializer	= require('xmldom').XMLSerializer		// DOM serializer (DOM -> string)
 , multer			= require('multer')					// plugin for transmiting file via HTTP
 , request			= require('request')				// send HTTP queries
+, libXSD			= require("xsd-schema-validator")	// used to verify XML database with respect to a schema
 , xmlSerializer	= null
 , domParser		= null
 ;
 
 /**_________________________________________________________________________________________________________________________________ 
- * Save the XML into a file, file acces is asynchronous -----------------------------------------------------------------------------
- *   - doc : the document containing the XML ----------------------------------------------------------------------------------------
- *   - res : the result stream of a client HTTP request -----------------------------------------------------------------------------
+ * Save the XML into a file, file acces is asynchronous ----------------------------------------------------------------------------
+ *   - doc : the document containing the XML ---------------------------------------------------------------------------------------
+ *   - res : the result stream of a client HTTP request ----------------------------------------------------------------------------
  **/
 function saveXML(doc, res) {
     fs.writeFile( './data/cabinetInfirmier.xml'
@@ -32,7 +33,7 @@ function saveXML(doc, res) {
 } 
 
 /**_________________________________________________________________________________________________________________________________ 
- * Returns DOM node of patient identified by numlber in document doc or null if there is no such patient --------------------------
+ * Returns DOM node of patient identified by numlber in document doc or null if there is no such patient ---------------------------
  **/
 function getPatient(doc, number) {
     var L = doc.getElementsByTagName('patient')
@@ -45,9 +46,9 @@ function getPatient(doc, number) {
 }
 
 
-/*
- * Define HTTP server, implement some ressources ----------------------------------------------------------------------------------
- *   - port : the TCP port on which the HTTP server will be listening -------------------------------------------------------------
+/**_________________________________________________________________________________________________________________________________
+ * Define HTTP server, implement some ressources -----------------------------------------------------------------------------------
+ *   - port : the TCP port on which the HTTP server will be listening --------------------------------------------------------------
  **/
 function init(port, applicationServerIP, applicationServerPort) {
     domParser		= new DOMParser()				// an instance of DOM parser     (string -> DOM)
@@ -263,7 +264,48 @@ function init(port, applicationServerIP, applicationServerPort) {
 							}
 						  );
 			  }
-	    );
+			  );
+	    
+	app.get ( '/check'
+			, function(req, res) {
+				 var str_xml, str_xsd;
+				 var P_xml = new Promise( function(resolve, reject) {
+											 fs.readFile( __dirname + '/data/cabinetInfirmier.xml'
+														, function(err, dataObj) {
+															 if(err) {reject();} else {str_xml = "".concat(dataObj); resolve();}
+															}
+														);
+											}
+										)
+				   , P_xsd = new Promise( function(resolve, reject) {  
+											 fs.readFile( __dirname + '/data/cabinet.xsd'
+														, function(err, dataObj) {
+															 if(err) {reject();} else {str_xml = "".concat(dataObj); resolve();}
+															}
+														);
+											}
+										)
+					, P_all = Promise.all( [P_xml, P_xsd] )
+					; // End of promises
+				   
+				 P_all.then	( function() { // If resolved
+								 // Check xml / xsd
+								 console.log( './data/cabinet.xsd' );
+								 libXSD.validateXML	( str_xml, './data/cabinet.xsd'
+													, function(err, result) {
+														  if (err)	{res.end("" + err);
+																	 console.log("Error:", err);
+																	} else {res.end("Valid!" + JSON.stringify(result));}
+														}
+													);
+								}
+							, function() { // If rejected
+								 res.end("Error, promises rejected");
+								}
+							);
+
+				}
+			);
 }
 
 
