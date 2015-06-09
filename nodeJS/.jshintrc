@@ -19,5 +19,6 @@
 				  , "clearInterval"	: false
 				  , "exports"		: false
 				  , "DOMParser"		: false
+				  , "process"		: false
 				  }
 }
