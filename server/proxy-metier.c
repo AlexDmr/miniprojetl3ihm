@@ -219,15 +219,19 @@ ssize_t readLine(int fd, char *buffer, size_t n) {
   size_t totRead;                     /* Total bytes read so far */
   char *buf;
   char ch;
-  
+
+  printf("----> readline \n");   
   if (n <= 0 || buffer == NULL) {
     errno = EINVAL;
     return -1;
   }
   buf = buffer;                   /* No pointer arithmetic on "void *" (????!!!) */
   totRead = 0;
+
   for (;;) {
+    printf("----> for(;;)\n");
     numRead = read(fd, &ch, 1);
+    printf("<---- for(;;)\n");
     if (numRead == -1) {
       if (errno == EINTR)         /* Interrupted --> restart read() */
 	continue;
@@ -248,6 +252,7 @@ ssize_t readLine(int fd, char *buffer, size_t n) {
     }
   }
   *buf = '\0';
+  printf("<---- readline %d \n", totRead);   
   return totRead;
 }
 
@@ -339,17 +344,18 @@ void connect_HTTP(int fd, int id, char name_serv_http[128]){
     fflush(lfp);
   }
   /* write to server */
+  /*
   printf(" >>> Transmission de la requete au serveur %s sur port %d <<< \n", 
 	 name_serv_http, portnum);  
+  printf("--%s--", buffer);
   if(write(http_fd,buffer,strlen(buffer))<1) {
     perror("write");
     close(fd); close(http_fd);
     return;
   }
-  else {
-    printf(" >>> Reception de la reponse du serveur HTTP <<< \n"); 
-    httpGet(nomFichierDataBase, http_fd);
-  }
+  */
+  printf(" >>> Reception de la reponse du serveur HTTP <<< \n"); 
+  httpGet(nomFichierDataBase, http_fd);
 }
 
 
@@ -440,7 +446,8 @@ void get_and_process_matrix(int id, int fd){
   char request_matrix[1024], buf2[512];
   char tampon[512];
   int mat_fd, ficres; 
-  char host[128]="maps.googleapis.com";
+  //  char host[128]="maps.googleapis.com";
+  char host[128] = "www-cache.ujf-grenoble.fr";
   int portnum;
   struct sockaddr_in sin;
   struct hostent *shes2;
@@ -464,7 +471,9 @@ void get_and_process_matrix(int id, int fd){
     host_error(host, buf2, fd); 
     return;
   }
-  portnum=PORT_GOOGLE;
+  //  portnum=PORT_GOOGLE;
+  portnum=3128;
+
   if(debug) printf("Trying %s on port %d...\n",host,portnum);
   sin.sin_family = AF_INET;
   bcopy(shes2->h_addr,&sin.sin_addr,sizeof(struct in_addr)) ;
