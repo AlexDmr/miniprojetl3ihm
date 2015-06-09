@@ -49,12 +49,12 @@ function getPatient(doc, number) {
   * Define HTTP server, implement some ressources ----------------------------------------------------------------------------------
   *   - port : the TCP port on which the HTTP server will be listening -------------------------------------------------------------
 **/
-function init(port) {
+function init(port, applicationServerIP, applicationServerPort) {
 	domParser		= new DOMParser()				// an instance of DOM parser     (string -> DOM)
 	xmlSerializer	= new XMLSerializer()			// an instance of DOM serializer (DOM -> string)
 	var doc											// will reference the document representing the XML structure
 	  , app											// will reference the HTTP server
-	  , applicationServer = {ip: '127.0.0.1', port: port}	// Application server IP and port that is in charge of optimizing nurses' travels, by default, this server
+	  , applicationServer = {ip: applicationServerIP, port: applicationServerPort}	// Application server IP and port that is in charge of optimizing nurses' travels, by default, this server
 	  ;
 	
 	// Read and parse the XML file containing the data
@@ -280,7 +280,10 @@ for(var i=2; i<process.argv.length; i++) {
 	params[p[0]] = p[1];
 }
 
-var port = params.port || 8080;
+var port					= params.port       || 8080
+  , applicationServerIP		= params.remoteIP   || '127.0.0.1'
+  , applicationServerPort	= params.remotePort || 8080
+  ;
 console.log("Usage :\n\tnode staticServeur.js [port:PORT]\n\tDefault port is 8080.");
 console.log("HTTP server listening on port " + port);
-init( port );
+init(port, applicationServerIP, applicationServerPort);
