@@ -207,7 +207,7 @@ function init(port, applicationServerIP, applicationServerPort) {
 				 saveXML(doc, res);
 				}
 			);
-=======
+/*
  * Define HTTP server, implement some ressources ----------------------------------------------------------------------------------
  *   - port : the TCP port on which the HTTP server will be listening -------------------------------------------------------------
  **/
@@ -368,7 +368,6 @@ function init(port) {
 		  saveXML(doc, res);
 	      }
 	    );
->>>>>>> eee0456e628cd2411f512371ffd4a02a651a649a
 
     // Define HTTP ressource POST /affectation, associate a patient with a nurse
     app.post( '/affectation'
@@ -412,14 +411,17 @@ function init(port) {
 		  res.end("INFIRMIERE " + req.body.id + ". WARNING: You should configure the optimization application server IP and port. //By default, the optimization application server is configured to be the HCI one.");
 	      }
 	    );
-    app.post( '/infirmiere'
+    app.post( '/infirmiereLocale'
 	      , function(req, res) {
 		  // res.writeHead(200);
 		  // res.write( self.xmlSerializer.serializeToString(doc) );
 		  // res.end();
+		  var form = { id	: req.body.id
+					 , xml	: xmlSerializer.serializeToString( doc )
+					 };
 		  request.post( { url	: 'http://' + applicationServer.ip + ':' + applicationServer.port + '/INFIRMIERE'
-				  , form	: req.body
-				}
+						, form	: form
+						}
 				, function(err, httpResponse, body) {
 				    if(err) {
 					res.writeHead(400);
