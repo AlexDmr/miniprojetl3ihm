@@ -8,7 +8,7 @@ var fs				= require('fs-extra')				// Access files
 , XMLSerializer	= require('xmldom').XMLSerializer		// DOM serializer (DOM -> string)
 , multer			= require('multer')					// plugin for transmiting file via HTTP
 , request			= require('request')				// send HTTP queries
-, libXSD			= require("xsd-schema-validator")	// used to verify XML database with respect to a schema
+, libXML			= require("libxmljs")				// used to verify XML database with respect to a schema
 , xmlSerializer	= null
 , domParser		= null
 ;
@@ -280,7 +280,7 @@ function init(port, applicationServerIP, applicationServerPort) {
 				   , P_xsd = new Promise( function(resolve, reject) {  
 											 fs.readFile( __dirname + '/data/cabinet.xsd'
 														, function(err, dataObj) {
-															 if(err) {reject();} else {str_xml = "".concat(dataObj); resolve();}
+															 if(err) {reject();} else {str_xsd = "".concat(dataObj); resolve();}
 															}
 														);
 											}
@@ -291,13 +291,11 @@ function init(port, applicationServerIP, applicationServerPort) {
 				 P_all.then	( function() { // If resolved
 								 // Check xml / xsd
 								 console.log( './data/cabinet.xsd' );
-								 libXSD.validateXML	( str_xml, './data/cabinet.xsd'
-													, function(err, result) {
-														  if (err)	{res.end("" + err);
-																	 console.log("Error:", err);
-																	} else {res.end("Valid!" + JSON.stringify(result));}
-														}
-													);
+								 var xsdDoc = libXML.parseXml(str_xsd); console.log(1);
+								 var xmlDoc = libXML.parseXml(str_xml); console.log(2);
+								 xmlDoc.validate(xsdDoc); console.log(3);
+								 console.log(xmlDoc.validationErrors);
+								 res.end( JSON.stringify(xmlDoc.validationErrors) );
 								}
 							, function() { // If rejected
 								 res.end("Error, promises rejected");
