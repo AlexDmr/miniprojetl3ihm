@@ -4,7 +4,7 @@ echo "------------- Compilation API XML -------------"
 cd xml-parsers ; make
 success=$?
 echo
-[ $success -eq 0 ] && (echo "------------ Compilation proxy --------------"; cd .. ; make proxy-metier)
+[ $success -eq 0 ] && (echo "------------ Compilation proxy --------------"; cd .. ; make serveur-metier)
 success=$?
 echo
 if [ $success -eq 0 ]
