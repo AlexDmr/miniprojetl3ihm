@@ -4,8 +4,8 @@
 var fs				= require('fs-extra')				// Access files
 , express			= require('express')				// Framework to implement HTTP server
 , bodyParser		= require("body-parser")			// plugin for parsing HTTP requests
-, DOMParser		= require('xmldom').DOMParser			// DOM parser 	  (string -> DOM)
-, XMLSerializer	= require('xmldom').XMLSerializer		// DOM serializer (DOM -> string)
+, DOMParser			= require('xmldom').DOMParser		// DOM parser 	  (string -> DOM)
+, XMLSerializer		= require('xmldom').XMLSerializer	// DOM serializer (DOM -> string)
 , multer			= require('multer')					// plugin for transmiting file via HTTP
 , request			= require('request')				// send HTTP queries
 , libXML			= require("libxmljs")				// used to verify XML database with respect to a schema

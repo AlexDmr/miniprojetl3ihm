@@ -1,8 +1,6 @@
-define	( [ 'L3_List'
-		  , 'MarkerWithLabel'
-		  , 'utils'
-		  ]
-		, function(L3_List, MarkerWithLabel, utils) {
+var MarkerWithLabel = require("./MarkerWithLabel.js")
+  , utils			= require("./utils.js");
+
 var ControlPanelInteraction = {
 	  map					: null
 	, L_markers				: []
@@ -18,6 +16,7 @@ var ControlPanelInteraction = {
 		 // Geocoder
 		 this.geocoder = new google.maps.Geocoder();
 
+		 
 		// New patient
 		 var div_addPatient = document.getElementById('addPatient');
 		 var btAddPatient	= document.getElementById('btAddPatient');
@@ -295,5 +294,4 @@ var ControlPanelInteraction = {
 		}
 };
 
-return ControlPanelInteraction;
-});
+exports.ControlPanel = ControlPanelInteraction;

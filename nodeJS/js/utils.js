@@ -1,6 +1,3 @@
-define	( [ 
-		  ]
-		, function(io) {
 var utils = {
 	XHR : function(method, ad, params) {
 		// method	: GET or POST
@@ -25,13 +22,5 @@ var utils = {
 	}
 };
 
-return utils;
-});
+exports.utils = utils;
 
-/*
-xhr = new XMLHttpRequest();
-F = new FormData()
-F.append('titi', 'toto');
-xhr.open("POST", "/affectation", false);
-xhr.send(F);
-*/

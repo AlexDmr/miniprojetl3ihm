@@ -1,4 +1,5 @@
-define( function() {/**
+//define( function() {
+/**
  * @name MarkerWithLabel for V3
  * @version 1.0.1 [September 17, 2010]
  * @author Gary Little (inspired by code from Marc Ridey of Google).
@@ -416,6 +417,4 @@ function MarkerWithLabel(opt_options) {
 }
 
 
-return MarkerWithLabel;
-}
-);
+exports.MarkerWithLabel = MarkerWithLabel;

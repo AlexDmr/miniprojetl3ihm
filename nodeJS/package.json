@@ -14,5 +14,6 @@
 		, "multer"				: "latest"
 		, "request"				: "latest"
 		, "libxmljs"			: "latest"
+		, "webpack"				: "latest"
     }
 }
