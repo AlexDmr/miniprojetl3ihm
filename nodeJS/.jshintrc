@@ -9,16 +9,17 @@
   "latedef"		: true,
   "undef"		: true,
   "unused"		: "vars",
-  "globals"		: { "define"	: false
-				  , "error"		: false
-				  , "document"	: false
-				  , "__dirname"	: false
-				  , "require"	: false
+  "globals"		: { "define"		: false
+				  , "error"			: false
+				  , "document"		: false
+				  , "__dirname"		: false
+				  , "require"		: false
 				  , "setTimeout"	: false
 				  , "clearTimeout"	: false
 				  , "clearInterval"	: false
 				  , "exports"		: false
 				  , "DOMParser"		: false
 				  , "process"		: false
+				  , "angular"		: false
 				  }
 }
