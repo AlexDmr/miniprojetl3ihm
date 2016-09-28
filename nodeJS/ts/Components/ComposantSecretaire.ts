@@ -1,43 +1,39 @@
-import * as NF from "../Services/cabinetMedicalService";
+import * as NF from "@Services/cabinetMedicalService";
 import {Component, OnInit} from "@angular/core";
 
-import {ComposantInfirmier} from "./ComposantInfirmier";
-import {AlxDropzone, AlxDragDrop} from "../Directives/DirectivesDragDrop";
+const style = `
+    section.infirmiers > .list {
+        display: flex;
+        flex-flow: row;
+        }
+     section.infirmiers > .list > * {
+        flex : 1 0 auto;
+     }`;
 
+const htmlTemplate = `
+    <h1 alx-dragdrop>IHM de la secrétaire</h1>
+    <p>à compléter...</p>
+    <p *ngIf="!initDone">CHARGEMENT...</p>
+    <section *ngIf="initDone" class="cabinet">
+        <section class="infirmiers">
+            <h2>Les infirmier</h2>
+            <section class="list">
+                <composant-infirmier 
+                    *ngFor="let infirmier of nf.infirmiers" 
+                    [nf]                 = "infirmier"
+                    alx-dropzone 
+                    (alx-ondrop)         = "affecterPatient($event.patient, $event.infirmierSource, infirmier)"
+                    [alx-accept-fct]     = "isPatient"
+                    alx-dragstart-css    = "dropCandidate"
+                    alx-draghover-css    = "canDrop"
+                    ></composant-infirmier>
+            </section>
+        </section>
+    </section>`;
 @Component({
     selector	: "composant-secretaire",
-    styles      : [
-        `section.infirmiers > .list {
-            display: flex;
-            flex-flow: row;
-            }
-         section.infirmiers > .list > * {
-            flex : 1 0 auto;
-         }
-        `
-    ],
-    template	:   `<h1 alx-dragdrop>IHM de la secrétaire</h1>
-				     <p>à compléter...</p>
-				     <p *ngIf="!initDone">CHARGEMENT...</p>
-				     <section *ngIf="initDone" class="cabinet">
-                        <section class="infirmiers">
-                            <h2>Les infirmier</h2>
-                            <section class="list">
-                                <composant-infirmier 
-                                    *ngFor="let infirmier of nf.infirmiers" 
-                                    [nf]                 = "infirmier"
-                                    alx-dropzone 
-                                    (alx-ondrop)         = "affecterPatient($event.patient, $event.infirmierSource, infirmier)"
-                                    [alx-accept-fct]     = "isPatient"
-                                    alx-dragstart-css    = "dropCandidate"
-                                    alx-draghover-css    = "canDrop"
-                                    ></composant-infirmier>
-                            </section>
-                        </section>
-                     </section>
-                    `,
-    directives	: [ComposantInfirmier, AlxDropzone, AlxDragDrop],
-    providers	: [NF.ServiceCabinetMedical]
+    styles      : [ style ],
+    template	: htmlTemplate
 })
 export class ComposantSecretaire implements OnInit {
     nf              : NF.CabinetInterface;

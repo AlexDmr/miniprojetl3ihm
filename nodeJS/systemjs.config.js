@@ -9,8 +9,7 @@
             // our app is within the app folder
             main: 'app',
             // @NoyauFonctionnel
-            '@NoyauFonctionnel/nf'      : 'app/nf/nf.js',
-            '@NoyauFonctionnel/service' : 'app/nf/service.js',
+            '@Services/cabinetMedicalService' : 'app/ts/Services/cabinetMedicalService.js',
             // angular bundles
             '@angular/core': 'npm:@angular/core/bundles/core.umd.js',
             '@angular/common': 'npm:@angular/common/bundles/common.umd.js',

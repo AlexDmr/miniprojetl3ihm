@@ -13,7 +13,6 @@ import {Component, Input} from "@angular/core";
                         <p class="sexe">{{nf.numeroSecuriteSociale}}</p>
                         <p>{{nf.adresse | json}}</p>
 				   </section>`,
-    directives	: [],
     providers	: []
 })
 export class ComposantPatient {
