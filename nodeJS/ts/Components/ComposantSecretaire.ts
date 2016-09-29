@@ -39,12 +39,12 @@ export class ComposantSecretaire implements OnInit {
     nf              : NF.CabinetInterface;
     initDone        : boolean = false;
     constructor		(public cms: NF.ServiceCabinetMedical) {
-        this.nf         = cms.cabinetJS;
+        this.nf = cms.cabinetJS;
     }
     affecterPatient(patient: NF.PatientInterface, infirmierOrigine: NF.InfirmierInterface, infirmierDestination: NF.InfirmierInterface) {
         this.cms.affecter(patient, infirmierOrigine, infirmierDestination).then( (response) => {
             if(response.status === 200) {
-                console.log( "affecter patient", patient, infirmierOrigine, infirmierDestination);
+                //console.log( "affecter patient", patient, infirmierOrigine, infirmierDestination);
                 if(infirmierOrigine) {
                     infirmierOrigine.patients.splice( infirmierOrigine.patients.indexOf(patient), 1);
                 } else {
@@ -64,7 +64,7 @@ export class ComposantSecretaire implements OnInit {
         console.log("Appelez le service pour formatter et obtenir les données du cabinet\n", this);
         this.cms.getData( "/data/cabinetInfirmier.xml" ).then( (cabinet: NF.CabinetInterface) => {
             console.log( "cabinetJS:", cabinet );
-            // this.nf = cabinet;
+            this.nf = cabinet;
             this.initDone = true;
         }, (err) => {console.error("Erreur lors du chargement du cabinet", "/data/cabinetInfirmier.xml", "\n", err);});
     }

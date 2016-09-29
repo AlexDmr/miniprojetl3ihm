@@ -4,14 +4,14 @@
 import { NgModule }                 from "@angular/core";
 import { BrowserModule }            from "@angular/platform-browser";
 import { platformBrowserDynamic }   from "@angular/platform-browser-dynamic";
-import { HttpModule }               from "@angular/http";
 
-import {ComposantSecretaire}        from "./Components/ComposantSecretaire";
+import { CabinetMedicalModule }     from "./cabinetMedicalModule";
+import { ComposantSecretaire }      from "./Components/ComposantSecretaire";
 
 @NgModule({
-    imports     : [BrowserModule, HttpModule],
-    declarations: [ComposantSecretaire],
-    bootstrap   : [ComposantSecretaire]
+    imports     : [ BrowserModule, CabinetMedicalModule ],
+    declarations: [],
+    bootstrap   : [ ComposantSecretaire ]
 })
 export class AppModule {}
 

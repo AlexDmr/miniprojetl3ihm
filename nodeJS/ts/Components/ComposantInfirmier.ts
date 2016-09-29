@@ -11,8 +11,8 @@ const style = `
     }`;
 
 const htmlTemplate = `
-    <section class                = "infirmier">
-        <img src="{{nf.photo}}" />
+    <section class = "infirmier">
+        <img src="data/{{nf.photo}}" />
         <p class="nom">{{nf.nom}}</p>
         <p class="prenom">{{nf.prenom}}</p>
         <p class="id">{{nf.id}}</p>
@@ -32,7 +32,7 @@ const htmlTemplate = `
 export class ComposantInfirmier {
     @Input() nf         : NF.InfirmierInterface;
     constructor		() {
-        // console.log( "new instance of ComposantInfirmier")
+        console.log( "new instance of ComposantInfirmier", this);
     }
 };
 
