@@ -34,5 +34,4 @@ export class ComposantInfirmier {
     constructor		() {
         console.log( "new instance of ComposantInfirmier", this);
     }
-};
-
+}

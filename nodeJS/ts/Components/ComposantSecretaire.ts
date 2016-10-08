@@ -21,11 +21,11 @@ const htmlTemplate = `
                 <composant-infirmier 
                     *ngFor="let infirmier of nf.infirmiers" 
                     [nf]                 = "infirmier"
-                    alx-dropzone 
                     (alx-ondrop)         = "affecterPatient($event.patient, $event.infirmierSource, infirmier)"
                     [alx-accept-fct]     = "isPatient"
                     alx-dragstart-css    = "dropCandidate"
                     alx-draghover-css    = "canDrop"
+                    alx-dropzone 
                     ></composant-infirmier>
             </section>
         </section>
@@ -71,4 +71,6 @@ export class ComposantSecretaire implements OnInit {
     isPatient( obj ) {
         return obj.type === "patient" && obj.patient && obj.infirmierSource;
     }
-};
+}
+
+

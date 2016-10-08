@@ -197,7 +197,7 @@ export class AlxDraggable {
                     this.currentDropZone.appendPointerHover( this.idPointer );
                     break;
                 }
-                element = element.parentElement;
+                element = <Element>element.parentElement;
             }
         }
         return this;

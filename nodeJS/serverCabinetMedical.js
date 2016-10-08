@@ -8,7 +8,7 @@ var fs				= require('fs-extra')				// Access files
 , XMLSerializer		= require('xmldom').XMLSerializer	// DOM serializer (DOM -> string)
 , multer			= require('multer')					// plugin for transmiting file via HTTP
 , request			= require('request')				// send HTTP queries
-, staticGzip 		=  require('http-static-gzip-regexp')
+, staticGzip 		= require('http-static-gzip-regexp')
 , libXML			= null //require("libxmljs")				// used to verify XML database with respect to a schema
 , xmlSerializer		= null
 , domParser			= null
@@ -102,7 +102,7 @@ function init(port, applicationServerIP, applicationServerPort) {
 				       var docHTML = domParser.parseFromString( data.toString() );
 				       var datalist = docHTML.getElementById		('logins');
 				       var L_nurses = doc.getElementsByTagName	('infirmier'), nurse;
-					   console.log( L_nurses.length );
+					   //console.log( L_nurses.length );
 				       for(var i=0; i<L_nurses.length; i++) {
 						   nurse = L_nurses[i];
 						   var option = docHTML.createElement('option');

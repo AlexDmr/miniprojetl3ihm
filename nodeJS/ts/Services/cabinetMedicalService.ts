@@ -15,18 +15,18 @@ export interface PatientInterface {
         numero      : string;
         etage       : string;
     };
-};
+}
 export interface InfirmierInterface {
     id          : string;
     prenom      : string;
     nom         : string;
     photo       : string;
-    patients    : Array<PatientInterface>;
-};
+    patients    : PatientInterface[];
+}
 export interface CabinetInterface {
-    infirmiers          : Array<InfirmierInterface>;
-    patientsNonAffectes : Array<PatientInterface>;
-};
+    infirmiers          : InfirmierInterface[];
+    patientsNonAffectes : PatientInterface  [];
+}
 
 @Injectable()
 export class ServiceCabinetMedical {
@@ -102,4 +102,4 @@ export class ServiceCabinetMedical {
             return null;
         });
     }
-};
+}

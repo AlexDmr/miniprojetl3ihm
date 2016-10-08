@@ -10,17 +10,17 @@
         <infirmier id="001">
             <nom>Versaire</nom>
             <prénom>Annie</prénom>
-            <photo>annie.jpg</photo>
+            <photo>homer1.gif</photo>
         </infirmier>
         <infirmier id="002">
             <nom>Cent</nom>
             <prénom>Sally</prénom>
-            <photo>sally.jpg</photo>
+            <photo>lisa111.gif</photo>
         </infirmier>
         <infirmier id="003">
             <nom>Nouie</nom>
             <prénom>Eva</prénom>
-            <photo>eva.jpg</photo>
+            <photo>maggie111.gif</photo>
         </infirmier>
     </infirmiers>
     <patients>
@@ -77,7 +77,7 @@
                 (Pansement de brûlure étendue ou de plaie chimique ou thermique étendue,
                     sur une surface supérieure à 5 % de la surface corporelle.....)
                 -->
-                <visite date="2014-12-08" intervenant="003">
+                <visite date="2014-12-08" intervenant="001">
                     <acte id="300"/>               
                 </visite>
                 
